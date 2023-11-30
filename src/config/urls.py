@@ -24,12 +24,12 @@ from django.conf import settings
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="TTS Project Api",
+        title="Pr Api",
         default_version='v1',
-        description="TTS documentations",
+        description="Pr api documentations",
         terms_of_service="https://www.google.com/policies/terms/",
         contact=openapi.Contact(email="haydarovakbar640@gmail.com"),
-        license=openapi.License(name="BSD License"),
+        license=openapi.License(name="MIT License"),
     ),
     public=True,
     permission_classes=(permissions.AllowAny,),
