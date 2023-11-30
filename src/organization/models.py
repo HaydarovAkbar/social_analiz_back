@@ -40,6 +40,14 @@ class Organization(models.Model):
         verbose_name_plural = 'Organizations'
         verbose_name = 'Organization'
         db_table = 'organization'
+        indexes = [
+            models.Index(fields=['shortname']),
+            models.Index(fields=['category']),
+            models.Index(fields=['specialization']),
+            models.Index(fields=['region']),
+            models.Index(fields=['district']),
+            models.Index(fields=['phone_number']),
+        ]
 
 #
 # class OrganizationSocials(models.Model):
