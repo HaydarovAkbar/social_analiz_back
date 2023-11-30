@@ -24,6 +24,7 @@ class User(AbstractUser):
     language = models.ForeignKey(Language, on_delete=models.SET_NULL, null=True)
     state = models.ForeignKey(State, on_delete=models.SET_NULL, null=True)
     organization = models.ForeignKey(Organization, on_delete=models.SET_NULL, null=True)
+
     groups = models.ManyToManyField(
         Group,
         verbose_name=_('groups'),

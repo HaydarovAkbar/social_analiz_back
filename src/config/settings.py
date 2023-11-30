@@ -11,7 +11,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config("SECRET_KEY")
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG", default=False, cast=bool)
 
@@ -20,6 +19,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 LOCAL_APPS = [
+    'modeltranslation',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -130,15 +130,15 @@ SIMPLE_JWT = {
 gettext = lambda s: s
 
 LANGUAGES = (
-    ('uz_latn', gettext("O'zbek")),
-    ('uz_cyrl', gettext('Uzbek')),
+    ('oz', gettext("O'zbek")),
+    ('uz', gettext('Uzbek')),
     ('en', gettext('English')),
     ('ru', gettext('Russian')),
 )
 
-MODELTRANSLATION_DEFAULT_LANGUAGE = 'uz_latn'
-MODELTRANSLATION_LANGUAGES = ('uz_latn', 'uz_cyrl', 'en', 'ru')
-MODELTRANSLATION_FALLBACK_LANGUAGES = ('uz_latn', 'uz_cyrl', 'en', 'ru')
+MODELTRANSLATION_DEFAULT_LANGUAGE = 'oz'
+MODELTRANSLATION_LANGUAGES = ('oz', 'uz', 'en', 'ru')
+MODELTRANSLATION_FALLBACK_LANGUAGES = ('oz', 'uz', 'en', 'ru')
 TRANSLATABLE_MODEL_MODULES = ['app', 'organization', 'level']
 
 MODELTRANSLATION_TRANSLATION_FILES = (
@@ -166,60 +166,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 
-HOST = 'https://akbarshox.uz'
+HOST = 'https://3b3b-194-93-24-3.ngrok-free.app'
 
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
 CSRF_TRUSTED_ORIGINS = [HOST]
-
-"""JAZZMIN SETTINGS"""
-JAZZMIN_SETTINGS = {
-    "site_title": "TTS Project Admins",
-    "site_header": "TTS",
-    "welcome_sign": "Welcome to TTS",
-    "search_model": "auth.User",
-    "user_avatar_diameter": 60,
-    "user_menu": [
-        {"name": "Profile", "url": "admin:auth_user_change", "icon": "user", "permissions": ["auth.change_user"]},
-        {"name": "API Docs", "url": "schema-swagger-ui", "icon": "book", "permissions": ["auth.change_user"]},
-        {"name": "Support", "url": " ", "icon": "question-circle", "permissions": ["auth.change_user"]},
-
-        {"name": "Settings", "url": "admin:core_setting_changelist", "icon": "cog",
-         "permissions": ["auth.change_user"]},
-        {"name": "Log Out", "url": "admin:logout", "icon": "sign-out-alt"},
-    ],
-    "user_menu_links": [
-        {"name": "TTS", "url": "https://TTS.uz", "icon": "link"},
-
-    ],
-    "icons": {
-        "auth": "fas fa-users-cog",
-        "auth.user": "fas fa-user",
-        "auth.Group": "fas fa-users",
-        "core": "fas fa-cogs",
-        "HomePage": "fas fa-home",
-        "sites": "fas fa-satellite",
-    },
-
-    "default_icon_parents": "fas fa-chevron-circle-right",
-    "default_icon_children": "fas fa-circle",
-
-    "custom_css": None,
-    "custom_js": None,
-
-    "fieldsets": [
-        ("General Information", {"fields": ["name", "logo", "favicon"]}),
-        ("SEO Information", {"fields": ["site_title", "site_header", "welcome_sign"]}),
-        ("Menu Options", {"fields": ["related_modal_active", "show_ui_builder", "changeform_format"]}),
-        ("User Options", {"fields": ["user_avatar", "user_avatar_diameter", "user_menu"]}),
-        ("Links", {"fields": ["links"]}),
-        ("Icons", {"fields": ["icons", "default_icon_parents", "default_icon_children"]}),
-        ("Customization", {"fields": ["custom_css", "custom_js"]}),
-    ],
-    "related_modal_active": False,
-    "show_ui_builder": True,
-    "changeform_format": "horizontal_tabs",
-    'translations': ['app'],
-    'translations_auto_reload': True,
-    'navigation_expanded': True,
-}
