@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils import timezone
-from organization.models import Organization
+
 
 class Level(models.Model):
     name = models.CharField(max_length=255)
@@ -30,9 +30,9 @@ class LevelCredantials(models.Model):
 
     def __str__(self):
         try:
-            return self.level.name + " " + self.score1 + "-" + self.score2
+            return self.level.name + " " + str(self.score1) + "-" + str(self.score2)
         except:
-            return self.score1 + "-" + self.score2
+            return str(self.score1) + "-" + str(self.score2)
 
     class Meta:
         verbose_name_plural = 'Level Credantials'
