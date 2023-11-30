@@ -13,7 +13,7 @@ class User(AbstractUser):
         _("Phone number"),
         help_text=_("Required. Only international format used. (998901234567)"),
         error_messages={
-            "unique": _("User with this phone number already exists.")
+            "unique": _("Userth this phone number already exists.")
         },
         unique=True,
         blank=True,
