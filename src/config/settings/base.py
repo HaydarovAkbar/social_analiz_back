@@ -54,11 +54,10 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'axes.middleware.AxesMiddleware',
-
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -122,15 +121,38 @@ SIMPLE_JWT = {
 }
 
 AUTHENTICATION_BACKENDS = [
-    # AxesStandaloneBackend should be the first backend in the
-    'axes.backends.AxesStandaloneBackend',
+    'axes.backends.AxesBackend',
     # Django ModelBackend is the default authentication backend.
     'django.contrib.auth.backends.ModelBackend',
+    # AxesStandaloneBackend should be the first backend in the
+    'axes.backends.AxesStandaloneBackend',
 ]
+# AXES_LOCKOUT_URL = '/account/lockout/'
+
 
 AXES_FAILURE_LIMIT = 3
 AXES_LOCKOUT_PARAMETERS = ["ip_address", ["username", "user_agent"]]
 AXES_COOLOFF_TIME = timedelta(minutes=1)
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'axes_file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'axes.log',
+        },
+    },
+    'loggers': {
+        'axes': {
+            'handlers': ['axes_file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
@@ -180,10 +202,14 @@ SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
 CSRF_TRUSTED_ORIGINS = [HOST]
 
+REDIS_HOST = ''
+REDIS_PORT = ''
+REDIS_DB = ''
+
 CACHES = {
-    'axes': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': '127.0.0.1:11211',
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379",
     }
 }
 
