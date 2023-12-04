@@ -21,11 +21,13 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from rest_framework import permissions
 from django.conf import settings
+from .api import router
+from django.conf.urls.i18n import i18n_patterns
 
 schema_view = get_schema_view(
     openapi.Info(
         title="Pr Api",
-        default_version='v1',
+        default_version='v2',
         description="Pr api documentations",
         terms_of_service="https://www.google.com/policies/terms/",
         contact=openapi.Contact(email="haydarovakbar640@gmail.com"),
@@ -36,9 +38,11 @@ schema_view = get_schema_view(
     # patterns=[path('api/', include('myapi.urls')), ],
     url=settings.HOST,  # Ensure this is https
 )
-
+i18n_patterns = [
+    path('api/v1/', include(router.urls)),
+]
 urlpatterns = [
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('admin/', admin.site.urls),
     path('', include(app_urls)),
-]
+] + i18n_patterns
