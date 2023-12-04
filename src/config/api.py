@@ -10,7 +10,7 @@ from utils import views as utils_views
 
 account_router = routers.DefaultRouter()
 
-account_router.register(r'users/', account_views.UserView, basename='users')
+account_router.register(r'users', account_views.UserView, basename='users')
 
 urlpatterns = [
     path('account/', include(account_router.urls)),
