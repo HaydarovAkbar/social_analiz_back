@@ -196,15 +196,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 
-HOST = 'https://3b3b-194-93-24-3.ngrok-free.app'
+HOST = 'https://9c38-194-93-24-3.ngrok-free.app'
 
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
 CSRF_TRUSTED_ORIGINS = [HOST]
-
-REDIS_HOST = ''
-REDIS_PORT = ''
-REDIS_DB = ''
 
 CACHES = {
     "default": {
