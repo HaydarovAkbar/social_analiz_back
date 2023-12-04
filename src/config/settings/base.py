@@ -40,7 +40,8 @@ PROD_APPS = [
     'rest_framework_simplejwt',
     "rest_framework_simplejwt.token_blacklist",
     'drf_yasg',
-    'axes'
+    'axes',
+    'django_filters',
 ]
 
 INSTALLED_APPS = LOCAL_APPS + PROD_APPS + DEV_APPS
@@ -167,7 +168,7 @@ LANGUAGES = (
 MODELTRANSLATION_DEFAULT_LANGUAGE = 'oz'
 MODELTRANSLATION_LANGUAGES = ('oz', 'uz', 'en', 'ru')
 MODELTRANSLATION_FALLBACK_LANGUAGES = ('oz', 'uz', 'en', 'ru')
-TRANSLATABLE_MODEL_MODULES = ['app', 'organization', 'level', 'utils']
+# TRANSLATABLE_MODEL_MODULES = ['app', 'organization', 'level', 'utils']
 
 MODELTRANSLATION_TRANSLATION_FILES = (
     'app.translation.translate',
