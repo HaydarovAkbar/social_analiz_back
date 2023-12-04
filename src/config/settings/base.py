@@ -167,12 +167,13 @@ LANGUAGES = (
 MODELTRANSLATION_DEFAULT_LANGUAGE = 'oz'
 MODELTRANSLATION_LANGUAGES = ('oz', 'uz', 'en', 'ru')
 MODELTRANSLATION_FALLBACK_LANGUAGES = ('oz', 'uz', 'en', 'ru')
-TRANSLATABLE_MODEL_MODULES = ['app', 'organization', 'level']
+TRANSLATABLE_MODEL_MODULES = ['app', 'organization', 'level', 'utils']
 
 MODELTRANSLATION_TRANSLATION_FILES = (
     'app.translation.translate',
     'organization.translation.translate',
     'level.translation.translate',
+    'utils.translation.translate',
 )
 
 TIME_ZONE = "Asia/Tashkent"
