@@ -51,6 +51,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.locale.LocaleMiddleware', # translate
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -152,23 +153,30 @@ LOGGING = {
     },
 }
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
+
+LANGUAGE_CODE = 'uz'
+
+USE_I18N = True
+
+USE_L10N = True
 
 gettext = lambda s: s
 
 LANGUAGES = (
     ('oz', gettext("O'zbek")),
-    ('uz', gettext('Uzbek')),
+    ('uz', gettext('Ўзбек тили')),
     ('en', gettext('English')),
     ('ru', gettext('Russian')),
+)
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, 'locale'),
 )
 
 MODELTRANSLATION_DEFAULT_LANGUAGE = 'oz'
 MODELTRANSLATION_LANGUAGES = ('oz', 'uz', 'en', 'ru')
 MODELTRANSLATION_FALLBACK_LANGUAGES = ('oz', 'uz', 'en', 'ru')
-# TRANSLATABLE_MODEL_MODULES = ['app', 'organization', 'level', 'utils']
 
 MODELTRANSLATION_TRANSLATION_FILES = (
     'app.translation.translate',
@@ -178,8 +186,6 @@ MODELTRANSLATION_TRANSLATION_FILES = (
 )
 
 TIME_ZONE = "Asia/Tashkent"
-
-USE_I18N = True
 
 USE_TZ = True
 
