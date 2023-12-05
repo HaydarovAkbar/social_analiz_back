@@ -51,7 +51,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.locale.LocaleMiddleware', # translate
+    'django.middleware.locale.LocaleMiddleware',  # translate
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -85,6 +85,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 #### to environment variables
 AUTH_USER_MODEL = "account.User"
+
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
@@ -156,9 +157,10 @@ LOGGING = {
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'uz'
+# LANGUAGE_CODE = 'uz'
 
 USE_I18N = True
+
 USE_L10N = True
 
 gettext = lambda s: s
@@ -173,9 +175,10 @@ LOCALE_PATHS = (
     os.path.join(BASE_DIR, 'locale'),
 )
 
-MODELTRANSLATION_DEFAULT_LANGUAGE = 'oz'
+MODELTRANSLATION_DEFAULT_LANGUAGE = 'uz'
 MODELTRANSLATION_LANGUAGES = ('oz', 'uz', 'en', 'ru')
 MODELTRANSLATION_FALLBACK_LANGUAGES = ('oz', 'uz', 'en', 'ru')
+
 
 MODELTRANSLATION_TRANSLATION_FILES = (
     'app.translation.translate',
@@ -215,3 +218,26 @@ CACHES = {
 }
 
 AXES_CACHE = 'axes'
+
+
+# SWAGGER_SETTINGS = {
+#     'USE_SESSION_AUTH': False,
+#     'SECURITY_DEFINITIONS': {
+#         'Your App API - Swagger': {
+#             'type': 'oauth2',
+#             'authorizationUrl': '/yourapp/o/authorize',
+#             'tokenUrl': '/yourapp/o/token/',
+#             'flow': 'accessCode',
+#             'scopes': {
+#                 'read groups': 'read groups',
+#             }
+#         }
+#     },
+#     'OAUTH2_REDIRECT_URL': 'http://localhost/static/drf-yasg/swagger-ui-dist/oauth2-redirect.html',
+#     'OAUTH2_CONFIG': {
+#         'clientId': 'yourAppClientId',
+#         'clientSecret': 'yourAppClientSecret',
+#         'appName': 'your application name'
+#
+#     },
+# }

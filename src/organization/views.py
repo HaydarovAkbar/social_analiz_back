@@ -11,6 +11,7 @@ from utils.pagination import TenPagination
 from utils.filters import OrganizationFilterBackend
 from . import serializers
 
+
 class OrganizationView(viewsets.ModelViewSet):
     queryset = models.Organization.objects.all()
     serializer_class = serializers.OrganizationSerializers

@@ -16,13 +16,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from app.urls import urlpatterns as app_urls
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from rest_framework import permissions
 from django.conf import settings
-from .api import urlpatterns
+from .api import urlpatterns as api_urls
 from django.conf.urls.i18n import i18n_patterns
+
+# from rest_framework import authentication
+
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -36,13 +38,15 @@ schema_view = get_schema_view(
     public=True,
     permission_classes=(permissions.AllowAny,),
     # patterns=[path('api/', include('myapi.urls')), ],
-    url=settings.HOST,  # Ensure this is https
+    url=settings.HOST,
 )
-i18n_patterns = [
-    path('api/v1/', include(urlpatterns)),
-]
+
 urlpatterns = [
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('admin/', admin.site.urls),
-    path('', include(app_urls)),
-] + i18n_patterns
+]
+
+urlpatterns += i18n_patterns(
+    path('api/v1/', include(api_urls)),
+    # path('', include('front.urls')),
+)
