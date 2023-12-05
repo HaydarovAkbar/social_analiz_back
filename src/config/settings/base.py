@@ -159,7 +159,6 @@ LOGGING = {
 LANGUAGE_CODE = 'uz'
 
 USE_I18N = True
-
 USE_L10N = True
 
 gettext = lambda s: s
