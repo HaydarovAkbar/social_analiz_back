@@ -23,6 +23,13 @@ api.register(r'specialization', utils_views.SpecializationView, basename='specia
 api.register(r'region', utils_views.RegionView, basename='region')
 api.register(r'district', utils_views.DistrictView, basename='district')
 
+# social registeration urls
+api.register(r'social_types', social_views.SocialTypeView, basename='social_types')
+api.register(r'socials', social_views.SocialView, basename='social')
+api.register(r'social_post', social_views.SocialPostView, basename='social_post')
+api.register(r'social_post_stats', social_views.SocialPostStatsView, basename='social_post_stats')
+
+
 urlpatterns = [
     path('', include(api.urls)),
     path('account/login/', account_views.LoginApiView.as_view(), name='login'),

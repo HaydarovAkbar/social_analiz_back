@@ -49,7 +49,7 @@ class Organization(models.Model):
             models.Index(fields=['phone_number']),
         ]
 
-#
+
 # class OrganizationSocials(models.Model):
 #     facebook = models.CharField(max_length=255, null=True, blank=True)
 #     instagram = models.CharField(max_length=255, null=True, blank=True)
@@ -58,4 +58,3 @@ class Organization(models.Model):
 #     twitter = models.CharField(max_length=255, null=True, blank=True)
 #     organization = models.ForeignKey(Organization, on_delete=models.SET_NULL, null=True, blank=True)
 #     facebook
-#
