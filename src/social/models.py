@@ -70,7 +70,7 @@ class SocialPost(models.Model):
     state = models.ForeignKey(State, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
-        return self.social.name + " " + self.post_id
+        return self.social_type.name + " " + self.post_id
 
     class Meta:
         verbose_name_plural = 'Social Posts'
@@ -78,7 +78,7 @@ class SocialPost(models.Model):
         db_table = 'social_posts'
         indexes = [
             models.Index(fields=['post_date']),
-            models.Index(fields=['social']),
+            models.Index(fields=['social_type']),
             models.Index(fields=['organization']),
             models.Index(fields=['state']),
         ]

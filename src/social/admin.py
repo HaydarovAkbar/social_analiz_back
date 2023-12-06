@@ -13,8 +13,8 @@ class SocialAdmin(admin.ModelAdmin):
 
 @admin.register(models.SocialPost)
 class SocialPostAdmin(admin.ModelAdmin):
-    list_filter = ('post_date', 'organization', 'social')
-    search_fields = ('url', 'social')
+    list_filter = ('post_date', 'organization', 'social_type')
+    search_fields = ('url', 'social_type')
     list_per_page = 50
 
 
