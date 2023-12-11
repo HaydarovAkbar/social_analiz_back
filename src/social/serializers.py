@@ -18,7 +18,7 @@ class SocialSerializers(serializers.ModelSerializer):
 class SocialPostSerializers(serializers.ModelSerializer):
     class Meta:
         model = models.SocialPost
-        fields = ['id', 'post_date', 'post_id', 'content', 'media_group_id', 'url', 'social', 'organization', 'state']
+        fields = ['id', 'post_date', 'post_id', 'content', 'media_group_id', 'url', 'social_type', 'organization', 'state']
 
 
 class SocialPostStatsSerializers(serializers.ModelSerializer):

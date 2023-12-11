@@ -204,7 +204,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 
-HOST = 'https://d77f-194-93-24-3.ngrok-free.app'
+HOST = 'https://5af7-194-93-24-3.ngrok-free.app'
 
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
@@ -218,7 +218,6 @@ CACHES = {
 }
 
 AXES_CACHE = 'axes'
-
 
 # SWAGGER_SETTINGS = {
 #     'USE_SESSION_AUTH': False,

@@ -1,8 +1,8 @@
 from django.contrib import admin
 from . import models
 
-
 admin.site.register(models.SocialTypes)
+
 
 @admin.register(models.Social)
 class SocialAdmin(admin.ModelAdmin):

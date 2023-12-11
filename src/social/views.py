@@ -28,7 +28,7 @@ class SocialPostView(viewsets.ModelViewSet):
     serializer_class = serializers.SocialPostSerializers
     pagination_class = TenPagination
     filter_backends = [DjangoFilterBackend, ]
-    filterset_fields = ['social', 'post_date']
+    filterset_fields = ['social_type', 'post_date']
 
 
 class SocialPostStatsView(viewsets.ModelViewSet):
