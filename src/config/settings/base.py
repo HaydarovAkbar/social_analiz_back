@@ -31,6 +31,7 @@ DEV_APPS = [
     'account',
     'level',
     'utils',
+    'bot.apps.BotConfig',
 ]
 
 PROD_APPS = [
@@ -42,6 +43,9 @@ PROD_APPS = [
     'drf_yasg',
     'axes',
     'django_filters',
+    'django_celery_results',
+    'django_celery_beat',
+    'django_extensions',
 ]
 
 INSTALLED_APPS = LOCAL_APPS + PROD_APPS + DEV_APPS
