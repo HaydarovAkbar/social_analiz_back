@@ -108,6 +108,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# DRF settings
+
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
@@ -117,6 +119,8 @@ REST_FRAMEWORK = {
     ),
     'DATETIME_FORMAT': "%Y-%m-%d"
 }
+
+# JWT settings
 
 SIMPLE_JWT = {
     "REFRESH_TOKEN_LIFETIME": timedelta(days=2),
@@ -132,12 +136,16 @@ AUTHENTICATION_BACKENDS = [
     # AxesStandaloneBackend should be the first backend in the
     'axes.backends.AxesStandaloneBackend',
 ]
+
+# AXES settings
+
 # AXES_LOCKOUT_URL = '/account/lockout/'
-
-
 AXES_FAILURE_LIMIT = 3
 AXES_LOCKOUT_PARAMETERS = ["ip_address", ["username", "user_agent"]]
 AXES_COOLOFF_TIME = timedelta(minutes=1)
+AXES_CACHE = 'axes'
+
+# LOGGING settings
 
 LOGGING = {
     'version': 1,
@@ -167,6 +175,8 @@ USE_I18N = True
 
 USE_L10N = True
 
+# Translate settings
+
 gettext = lambda s: s
 
 LANGUAGES = (
@@ -182,7 +192,6 @@ LOCALE_PATHS = (
 MODELTRANSLATION_DEFAULT_LANGUAGE = 'uz'
 MODELTRANSLATION_LANGUAGES = ('oz', 'uz', 'en', 'ru')
 MODELTRANSLATION_FALLBACK_LANGUAGES = ('oz', 'uz', 'en', 'ru')
-
 
 MODELTRANSLATION_TRANSLATION_FILES = (
     'app.translation.translate',
@@ -208,7 +217,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 
-HOST = 'https://5af7-194-93-24-3.ngrok-free.app'
+HOST = 'https://700e-194-93-24-3.ngrok-free.app'
 
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
@@ -221,26 +230,20 @@ CACHES = {
     }
 }
 
-AXES_CACHE = 'axes'
+# Celery settings
 
-# SWAGGER_SETTINGS = {
-#     'USE_SESSION_AUTH': False,
-#     'SECURITY_DEFINITIONS': {
-#         'Your App API - Swagger': {
-#             'type': 'oauth2',
-#             'authorizationUrl': '/yourapp/o/authorize',
-#             'tokenUrl': '/yourapp/o/token/',
-#             'flow': 'accessCode',
-#             'scopes': {
-#                 'read groups': 'read groups',
-#             }
-#         }
-#     },
-#     'OAUTH2_REDIRECT_URL': 'http://localhost/static/drf-yasg/swagger-ui-dist/oauth2-redirect.html',
-#     'OAUTH2_CONFIG': {
-#         'clientId': 'yourAppClientId',
-#         'clientSecret': 'yourAppClientSecret',
-#         'appName': 'your application name'
-#
-#     },
-# }
+CELERY_BROKER_URL = "redis://localhost:6379"
+CELERY_RESULT_BACKEND = "redis://localhost:6379"
+
+CELERY_TIMEZONE = "Asia/Tashkent"
+
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+
+# Bot settings
+
+TOKEN = config("TOKEN")

@@ -3,10 +3,11 @@ from telegram.ext import Dispatcher, CommandHandler, MessageHandler, Filters, Co
 from django.conf import settings
 import requests
 from organization.models import Organization
-from social.models import SocialPost, Social, SocialTypes, SocialPostStats
+from social.models import SocialPost, Social, SocialTypes, SocialPostStats, SocialPostComment
 from utils.models import State
 from datetime import datetime
 import json
+from django.utils import timezone
 
 
 def run():
@@ -26,7 +27,7 @@ def get_channel_members(channel_username):
 
 
 def channel_post(update: Update, context):
-    print(update.channel_post)
+    # print(update.channel_post)
     channel_username = update.channel_post.chat.username
     content = update.channel_post.text if update.channel_post.caption is None else update.channel_post.caption
     social_type = SocialTypes.objects.get(name='telegram')
@@ -61,30 +62,54 @@ def channel_post(update: Update, context):
     return True
 
 
+def get_comment_msg(message_id):
+    if SocialPost.objects.filter(post_id=message_id).exists():
+        return SocialPost.objects.filter(post_id=message_id).first()
+    elif SocialPostComment.objects.filter(comment_id=message_id).exists():
+        return SocialPostComment.objects.filter(comment_id=message_id).first().post
+    else:
+        return None
+
+
 def group_post(update: Update, context):
     message_id = update.message.message_id
     forward_from_chat = update.message.forward_from_chat
-    now = datetime.now()
-    chat_id = 1122
+    now = timezone.now()
     chat_username = update.message.chat.username
-    organization_id = Social.objects.filter(tg_group=chat_username).first()
-    if not organization_id:
+    organization = Social.objects.filter(tg_group=chat_username).first()
+    if not organization:
         return False
-    if forward_from_chat == None and not (update.message.reply_to_message is None):
-        # print("COMMENT")
+    if forward_from_chat is None and not (update.message.reply_to_message is None):
+        print("this is comment")
         reply_to_message = update.message.reply_to_message
         reply_message_id = reply_to_message.message_id
-        reply_post = get_comment_message_id(reply_message_id)
-        _ = insert_comment_message_id(chat_id, message_id, '1', now, reply_post[5], organization_id[0])
-        update_post_stats(reply_post[5])
+        reply_post = get_comment_msg(reply_message_id)
+        if reply_post:
+            return False
+        media_group_id = update.message.media_group_id
+        SocialPostComment.objects.create(
+            comment_id=message_id,
+            created_at=now,
+            media_group_id=media_group_id,
+            url=update.message.link,
+            social_type=SocialTypes.objects.get(name='telegram'),
+            organization=organization,
+            post=reply_post
+        )
+        post_stat = SocialPostStats.objects.get(
+            post=reply_post,
+            social_type=SocialTypes.objects.get(name='telegram'),
+        )
+        post_stat.comments += 1
+        post_stat.save()
     else:
-        # print("POST")
-        channel_username = forward_from_chat.username
-        forward_from_message_id = update.message.forward_from_message_id
-        organization = get_organization_with_username(channel_username)
-        post = get_last_post_with_message_id(organization[0], forward_from_message_id)
-        _ = insert_comment_message_id(chat_id, message_id, '1', now, post[0], organization_id[0])
-        return True
+        print("This is post")
+        # channel_username = forward_from_chat.username
+        # forward_from_message_id = update.message.forward_from_message_id
+        # organization = get_organization_with_username(channel_username)
+        # post = get_last_post_with_message_id(organization[0], forward_from_message_id)
+        # _ = insert_comment_message_id(chat_id, message_id, '1', now, post[0], organization_id[0])
+        # return True
 
 
 def message(update: Update, context):

@@ -119,14 +119,15 @@ class SocialPostStats(models.Model):
 
 class SocialPostComment(models.Model):
     comment_id = models.CharField(max_length=255, null=True, blank=True)
-    reply_to_message_id = models.CharField(max_length=255, null=True, blank=True)
     media_group_id = models.CharField(max_length=24, null=True, blank=True)
     url = models.URLField(null=True, blank=True)
+
 
     created_at = models.DateTimeField(auto_now_add=True)
 
     social_type = models.ForeignKey(SocialTypes, on_delete=models.SET_NULL, null=True)
     organization = models.ForeignKey(Organization, on_delete=models.SET_NULL, null=True)
+    post = models.ForeignKey(SocialPost, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.social_type.name + " " + self.comment_id
@@ -138,4 +139,5 @@ class SocialPostComment(models.Model):
         indexes = [
             models.Index(fields=['social_type']),
             models.Index(fields=['organization']),
+            models.Index(fields=['post']),
         ]
