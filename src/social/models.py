@@ -115,3 +115,27 @@ class SocialPostStats(models.Model):
             models.Index(fields=['created_at']),
             models.Index(fields=['post']),
         ]
+
+
+class SocialPostComment(models.Model):
+    comment_id = models.CharField(max_length=255, null=True, blank=True)
+    reply_to_message_id = models.CharField(max_length=255, null=True, blank=True)
+    media_group_id = models.CharField(max_length=24, null=True, blank=True)
+    url = models.URLField(null=True, blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    social_type = models.ForeignKey(SocialTypes, on_delete=models.SET_NULL, null=True)
+    organization = models.ForeignKey(Organization, on_delete=models.SET_NULL, null=True)
+
+    def __str__(self):
+        return self.social_type.name + " " + self.comment_id
+
+    class Meta:
+        verbose_name_plural = 'Social Post Comments'
+        verbose_name = 'Social Post Comment'
+        db_table = 'social_post_comments'
+        indexes = [
+            models.Index(fields=['social_type']),
+            models.Index(fields=['organization']),
+        ]

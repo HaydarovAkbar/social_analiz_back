@@ -67,9 +67,8 @@ def group_post(update: Update, context):
     now = datetime.now()
     chat_id = 1122
     chat_username = update.message.chat.username
-    organization_id = get_organization_with_group_username(chat_username)
+    organization_id = Social.objects.filter(tg_group=chat_username).first()
     if not organization_id:
-        # print("Organization not found")
         return False
     if forward_from_chat == None and not (update.message.reply_to_message is None):
         # print("COMMENT")
