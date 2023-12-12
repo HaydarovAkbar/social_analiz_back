@@ -247,3 +247,10 @@ CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 # Bot settings
 
 TOKEN = config("TOKEN")
+
+# PARSING SETTINGS
+
+TG_PARSE_MSG_COUNT = 350
+
+LIVEDONE_TOKEN = 'aa61a4c4282ef849.78657012'
+LIVEDONE_URL = "https://api.livedune.ru/accounts/ID/posts"
