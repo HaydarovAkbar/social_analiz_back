@@ -50,7 +50,23 @@ def parsing_web_tg():
 # Compare this snippet
 @celery_app.task
 def update_social_stats():
-    for organ in Social.objects.filter(state=State.objects.first()):
-        web_scrapping_tg(organ)
-        time.sleep(1)
+    for social in Social.objects.filter(state=State.objects.first()):
+        if social.social_type.attr == "telegram":
+            continue
+        stats = get_stats(social.integration_id)
+        if stats:
+            for post_stats in stats:
+                post = SocialPost.objects.filter(post_id=post_stats['id']).first()
+                if post:
+                    if SocialPostStats.objects.filter(post=post, stat_date__year=post_stats['date'].year,
+                                                      stat_date__month=post_stats['date'].month,
+                                                      stat_date__day=post_stats['date'].day).exists():
+                        SocialPostStats.objects.filter(post=post, stat_date__year=post_stats['date'].year,
+                                                       stat_date__month=post_stats['date'].month,
+                                                       stat_date__day=post_stats['date'].day).update(
+                            views=post_stats['views'])
+                    else:
+                        SocialPostStats.objects.create(post=post, views=post_stats['views'],
+                                                       stat_date=post_stats['date'])
+        time.sleep(0.5)
     return True
