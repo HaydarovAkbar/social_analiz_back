@@ -42,22 +42,8 @@ class GetSocialPostStatsByDateSerializers(serializers.ModelSerializer):
         model = models.SocialPostStats
         fields = ['date_from', 'date_to', 'category', 'region', 'district', 'organization', 'social_type']
 
-    # def get_fields(self):
-    #     fields = super(GetSocialPostStatsByDateSerializers, self).get_fields()
-    #     request = self.context.get('request', None)
-    #     if request:
-    #         if request.query_params.get('date_from', None):
-    #             fields['date_from'].read_only = False
-    #         if request.query_params.get('date_to', None):
-    #             fields['date_to'].read_only = False
-    #         if request.query_params.get('category', None):
-    #             fields['category'].read_only = False
-    #         if request.query_params.get('region', None):
-    #             fields['region'].read_only = False
-    #         if request.query_params.get('district', None):
-    #             fields['district'].read_only = False
-    #         if request.query_params.get('organization', None):
-    #             fields['organization'].read_only = False
-    #         if request.query_params.get('social_type', None):
-    #             fields['social_type'].read_only = False
-    #     return fields
+
+class GetActiveSocialSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = models.Social
+        fields = '__all__'

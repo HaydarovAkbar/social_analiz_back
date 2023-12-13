@@ -4,15 +4,16 @@ from rest_framework import status
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Sum
 from drf_yasg.utils import swagger_auto_schema
-from drf_yasg import openapi
-
-from rest_framework import generics
 
 from . import models
-from utils.pagination import TenPagination, TwentyPagination
 from . import serializers
-from utils.filters import SocialPostFilterByDateBackend
-from .models import SocialPost, SocialPostStats
+from .models import SocialPost, SocialPostStats, Social, SocialTypes
+from .params import default_and_date_params, filter_default_params
+
+from organization.models import Organization
+from utils.models import State
+from utils.pagination import TenPagination, TwentyPagination
+from utils.filters import SocialPostFilterByDateBackend, ActiveSocialFilterBackend
 
 
 class SocialTypeView(viewsets.ModelViewSet):
@@ -46,30 +47,16 @@ class SocialPostStatsView(viewsets.ModelViewSet):
     filterset_fields = ['social', ]
 
 
-class GetSocialPostStatsByDate(viewsets.ModelViewSet):
+class GetSocialPostStatsByDateView(viewsets.ModelViewSet):
     queryset = SocialPost.objects.all().order_by('id')
     serializer_class = serializers.GetSocialPostStatsByDateSerializers
-    filter_backends = [SocialPostFilterByDateBackend, DjangoFilterBackend]
-    filter_fields = ['date_from', 'date_to', 'category', 'region', 'district', 'organization', 'social_type', ]
+    filter_backends = [SocialPostFilterByDateBackend, ]
     http_method_names = ['get', ]
 
-    @swagger_auto_schema(
-        manual_parameters=[
-            openapi.Parameter('date_from', openapi.IN_QUERY, description="Start date", type=openapi.TYPE_STRING),
-            openapi.Parameter('date_to', openapi.IN_QUERY, description="End date", type=openapi.TYPE_STRING),
-            openapi.Parameter('category', openapi.IN_QUERY, description="Category id", type=openapi.TYPE_INTEGER),
-            openapi.Parameter('region', openapi.IN_QUERY, description="Region id", type=openapi.TYPE_INTEGER),
-            openapi.Parameter('district', openapi.IN_QUERY, description="District id", type=openapi.TYPE_INTEGER),
-            openapi.Parameter('organization', openapi.IN_QUERY, description="Organization id", type=openapi.TYPE_INTEGER),
-            openapi.Parameter('social_type', openapi.IN_QUERY, description="Social type id", type=openapi.TYPE_INTEGER),
-            # Add other query parameters similarly
-        ],
-        responses={200: 'OK'}
-    )
+    @swagger_auto_schema(manual_parameters=default_and_date_params, responses={200: 'OK'})
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
         response = dict()
-        print(queryset)
         response['posts'] = queryset.count()
         get_post_stats = SocialPostStats.objects.filter(post__in=queryset)
         response['views'] = get_post_stats.aggregate(Sum('views'))['views__sum']
@@ -84,4 +71,28 @@ class GetSocialPostStatsByDate(viewsets.ModelViewSet):
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
 
+class GetActiveSocialView(viewsets.ModelViewSet):
+    queryset = Social.objects.all().order_by('id')
+    serializer_class = serializers.GetActiveSocialSerializers
+    filter_backends = [ActiveSocialFilterBackend, ]
+    http_method_names = ['get', ]
 
+    @swagger_auto_schema(manual_parameters=filter_default_params, responses={200: 'OK'})
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        response = dict()
+        social_types_count = SocialTypes.objects.filter(state=State.objects.first()).count()
+        organization_count = self.filter_queryset(Organization.objects.filter(state=State.objects.first()).count())
+        social_count = organization_count * social_types_count
+        active_socials = queryset.count()
+        socials = dict()
+        for social_type in SocialTypes.objects.filter(state=State.objects.first()):
+            social = queryset.filter(social_type=social_type)
+            socials[social_type.attr] = {'status': social.count() > 0,
+                                         'url': social.first().link if social.count() == 1 else None}
+        response['socials'] = socials
+        response['statistics'] = {
+            'active_socials': active_socials,
+            'inactive_socials': social_count - active_socials,
+        }
+        return Response(response, status=status.HTTP_200_OK)

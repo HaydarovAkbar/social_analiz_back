@@ -11,6 +11,7 @@ class SocialTypes(models.Model):
     updated_at = models.DateTimeField(auto_now=True, null=True)
     state = models.ForeignKey(State, on_delete=models.SET_NULL, null=True)
 
+    objects = models.Manager()
     def __str__(self):
         return self.name
 
@@ -36,6 +37,8 @@ class Social(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.SET_NULL, null=True)
     social_type = models.ForeignKey(SocialTypes, on_delete=models.SET_NULL, null=True)
     state = models.ForeignKey(State, on_delete=models.SET_NULL, null=True)
+
+    objects = models.Manager()
 
     def __str__(self):
         try:
@@ -68,6 +71,8 @@ class SocialPost(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.SET_NULL, null=True)
 
     state = models.ForeignKey(State, on_delete=models.SET_NULL, null=True)
+
+    objects = models.Manager()
 
     def __str__(self):
         return self.social_type.name + " " + self.post_id
@@ -103,6 +108,8 @@ class SocialPostStats(models.Model):
     post = models.ForeignKey(SocialPost, on_delete=models.CASCADE, null=True)
     social = models.ForeignKey(Social, on_delete=models.SET_NULL, null=True)
 
+    objects = models.Manager()
+
     def __str__(self):
         try:
             return self.social.name + " " + str(self.created_at)
@@ -131,6 +138,8 @@ class SocialPostComment(models.Model):
     social_type = models.ForeignKey(SocialTypes, on_delete=models.SET_NULL, null=True)
     organization = models.ForeignKey(Organization, on_delete=models.SET_NULL, null=True)
     post = models.ForeignKey(SocialPost, on_delete=models.CASCADE, null=True)
+
+    objects = models.Manager()
 
     def __str__(self):
         return self.social_type.name + " " + self.id

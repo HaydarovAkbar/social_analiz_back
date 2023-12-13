@@ -50,3 +50,24 @@ class SocialPostFilterByDateBackend(DjangoFilterBackend):
         if organization:
             queryset = queryset.filter(organization=organization)
         return queryset
+
+
+class ActiveSocialFilterBackend(DjangoFilterBackend):
+    def filter_queryset(self, request, queryset, view):
+        region = request.query_params.get('region', None)
+        district = request.query_params.get('district', None)
+        category = request.query_params.get('category', None)
+        social_type = request.query_params.get('social_type', None)
+        organization = request.query_params.get('organization', None)
+
+        if region:
+            queryset = queryset.filter(organization__region=region)
+        if district:
+            queryset = queryset.filter(organization__district=district)
+        if category:
+            queryset = queryset.filter(organization__category=category)
+        if social_type:
+            queryset = queryset.filter(social_type=social_type)
+        if organization:
+            queryset = queryset.filter(organization=organization)
+        return queryset

@@ -25,8 +25,11 @@ class Organization(models.Model):
         null=True, blank=True)
     accounter = models.CharField(_('accounter'), max_length=250, null=True)
     leader = models.CharField(_('leader'), max_length=250, null=True)
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
+
+    objects = models.Manager()
 
     def __str__(self):
         return self.shortname
@@ -48,13 +51,3 @@ class Organization(models.Model):
             models.Index(fields=['district']),
             models.Index(fields=['phone_number']),
         ]
-
-
-# class OrganizationSocials(models.Model):
-#     facebook = models.CharField(max_length=255, null=True, blank=True)
-#     instagram = models.CharField(max_length=255, null=True, blank=True)
-#     telegram = models.CharField(max_length=255, null=True, blank=True)
-#     youtube = models.CharField(max_length=255, null=True, blank=True)
-#     twitter = models.CharField(max_length=255, null=True, blank=True)
-#     organization = models.ForeignKey(Organization, on_delete=models.SET_NULL, null=True, blank=True)
-#     facebook
