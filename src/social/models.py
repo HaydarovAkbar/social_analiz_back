@@ -104,7 +104,10 @@ class SocialPostStats(models.Model):
     social = models.ForeignKey(Social, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
-        return self.social.name + " " + str(self.created_at)
+        try:
+            return self.social.name + " " + str(self.created_at)
+        except:
+            return str(self.created_at)
 
     class Meta:
         verbose_name_plural = 'Social Stats'
@@ -130,7 +133,7 @@ class SocialPostComment(models.Model):
     post = models.ForeignKey(SocialPost, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return self.social_type.name + " " + self.comment_id
+        return self.social_type.name + " " + self.id
 
     class Meta:
         verbose_name_plural = 'Social Post Comments'

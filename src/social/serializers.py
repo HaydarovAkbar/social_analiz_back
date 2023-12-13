@@ -25,8 +25,8 @@ class SocialPostSerializers(serializers.ModelSerializer):
 class SocialPostStatsSerializers(serializers.ModelSerializer):
     class Meta:
         model = models.SocialPostStats
-        fields = ['id', 'views', 'likes', 'comments', 'shares', 'reactions', 'followers', 'social']
-        depth = 1
+        fields = ['id', 'views', 'likes', 'comments', 'shares', 'reactions', 'followers', 'social', 'post']
+        # depth = 1
 
 
 class GetSocialPostStatsByDateSerializers(serializers.ModelSerializer):

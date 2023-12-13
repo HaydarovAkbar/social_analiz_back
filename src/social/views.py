@@ -3,6 +3,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Sum
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 
 from rest_framework import generics
 
@@ -51,9 +53,23 @@ class GetSocialPostStatsByDate(viewsets.ModelViewSet):
     filter_fields = ['date_from', 'date_to', 'category', 'region', 'district', 'organization', 'social_type', ]
     http_method_names = ['get', ]
 
+    @swagger_auto_schema(
+        manual_parameters=[
+            openapi.Parameter('date_from', openapi.IN_QUERY, description="Start date", type=openapi.TYPE_STRING),
+            openapi.Parameter('date_to', openapi.IN_QUERY, description="End date", type=openapi.TYPE_STRING),
+            openapi.Parameter('category', openapi.IN_QUERY, description="Category id", type=openapi.TYPE_INTEGER),
+            openapi.Parameter('region', openapi.IN_QUERY, description="Region id", type=openapi.TYPE_INTEGER),
+            openapi.Parameter('district', openapi.IN_QUERY, description="District id", type=openapi.TYPE_INTEGER),
+            openapi.Parameter('organization', openapi.IN_QUERY, description="Organization id", type=openapi.TYPE_INTEGER),
+            openapi.Parameter('social_type', openapi.IN_QUERY, description="Social type id", type=openapi.TYPE_INTEGER),
+            # Add other query parameters similarly
+        ],
+        responses={200: 'OK'}
+    )
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
         response = dict()
+        print(queryset)
         response['posts'] = queryset.count()
         get_post_stats = SocialPostStats.objects.filter(post__in=queryset)
         response['views'] = get_post_stats.aggregate(Sum('views'))['views__sum']
@@ -66,3 +82,6 @@ class GetSocialPostStatsByDate(viewsets.ModelViewSet):
 
     def retrieve(self, request, *args, **kwargs):
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+
+
