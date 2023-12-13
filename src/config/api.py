@@ -28,6 +28,7 @@ api.register(r'social_types', social_views.SocialTypeView, basename='social_type
 api.register(r'socials', social_views.SocialView, basename='social')
 api.register(r'social_post', social_views.SocialPostView, basename='social_post')
 api.register(r'social_post_stats', social_views.SocialPostStatsView, basename='social_post_stats')
+api.register(r'get_social_post_stats_by_date', social_views.GetSocialPostStatsByDate, basename='get_social_post_stats_by_date')
 
 
 urlpatterns = [

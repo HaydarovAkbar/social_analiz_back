@@ -1,12 +1,10 @@
-from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
 from django_filters.rest_framework import DjangoFilterBackend
 
-
 from . import models
-from utils.pagination import TenPagination, TwentyPagination
+from .pagination import TenPagination, TwentyPagination
 from . import serializers
 
 
@@ -48,3 +46,4 @@ class DistrictView(viewsets.ModelViewSet):
     pagination_class = TenPagination
     filter_backends = [DjangoFilterBackend, ]
     filterset_fields = ['region', ]
+
