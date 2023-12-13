@@ -180,3 +180,27 @@ class GraphSocialPostStatsByDateView(viewsets.ModelViewSet):
 
     def retrieve(self, request, *args, **kwargs):
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+
+# Path: src\social\views.py
+class GetSocialConnectCountView(viewsets.ModelViewSet):
+    queryset = Social.objects.all().order_by('id')
+    serializer_class = serializers.GetActiveSocialSerializers
+    filter_backends = [ActiveSocialFilterBackend, ]
+    http_method_names = ['get', ]
+
+    @swagger_auto_schema(manual_parameters=filter_default_params, responses={200: 'OK'},
+                         operation_id='Get social connect count')
+    def list(self, request, *args, **kwargs):
+        """Get social connect count"""
+        queryset = self.filter_queryset(self.get_queryset())
+        response = dict()
+        for item in SocialTypes.objects.filter(state=State.objects.first()):
+            social_f = queryset.filter(social_type=item)
+            social_attr = dict()
+            social_count = social_f.filter(state=State.objects.first()).count()
+            social_attr['active'] = social_count
+            social_attr['inactive'] = Organization.objects.filter(
+                state=State.objects.first()).count() - social_count
+            response[item.attr] = social_attr
+        return Response(response, status=status.HTTP_200_OK)

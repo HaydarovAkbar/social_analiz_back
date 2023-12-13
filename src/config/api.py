@@ -33,6 +33,8 @@ api.register(r'get_social_post_stats_by_date', social_views.GetSocialPostStatsBy
 api.register(r'get_active_social', social_views.GetActiveSocialView, basename='get_active_social')
 api.register(r'graph_social_post_stats_by_date', social_views.GraphSocialPostStatsByDateView,
              basename='graph_social_post_stats_by_date')
+api.register(r'get_social_count_by_status', social_views.GetSocialConnectCountView,
+             basename='get_social_count_by_status')
 
 urlpatterns = [
     path('', include(api.urls)),
