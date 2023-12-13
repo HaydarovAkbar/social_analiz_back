@@ -1,7 +1,7 @@
 from modeltranslation.translator import translator, TranslationOptions, register
-from ..models import Level
+from ..models import LevelType
 
 
-@register(Level)
-class LevelTranslationOptions(TranslationOptions):
+@register(LevelType)
+class LevelTypeTranslationOptions(TranslationOptions):
     fields = ('name',)

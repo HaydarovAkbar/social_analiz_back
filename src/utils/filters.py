@@ -1,5 +1,4 @@
 from django_filters.rest_framework import DjangoFilterBackend
-from django_filters.rest_framework import FilterSet
 
 
 class OrganizationFilterBackend(DjangoFilterBackend):

@@ -36,6 +36,9 @@ api.register(r'graph_social_post_stats_by_date', social_views.GraphSocialPostSta
 api.register(r'get_social_count_by_status', social_views.GetSocialConnectCountView,
              basename='get_social_count_by_status')
 
+# level registeration urls
+api.register(r'level_type', level_views.LevelTypeViewSet, basename='level_type')
+
 urlpatterns = [
     path('', include(api.urls)),
     path('account/login/', account_views.LoginApiView.as_view(), name='login'),
