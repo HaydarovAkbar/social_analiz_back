@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils import timezone
 
+from organization.models import Organization
+
 
 class Level(models.Model):
     name = models.CharField(max_length=255)
@@ -21,25 +23,25 @@ class Level(models.Model):
         return self
 
 
-class LevelCredantials(models.Model):
+class LevelOrganization(models.Model):
     level = models.ForeignKey(Level, on_delete=models.SET_NULL, null=True)
-    score1 = models.PositiveIntegerField(default=1)
-    score2 = models.PositiveIntegerField(default=1)
+    organization = models.ForeignKey(Organization, on_delete=models.SET_NULL, null=True)
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
 
     def __str__(self):
         try:
-            return self.level.name + " " + str(self.score1) + "-" + str(self.score2)
+            return self.level.name + " " + self.organization.shortname
         except:
-            return str(self.score1) + "-" + str(self.score2)
+            return self.level.name
 
     class Meta:
-        verbose_name_plural = 'Level Credantials'
-        verbose_name = 'Level Credantial'
-        db_table = 'level_credantials'
+        verbose_name_plural = 'Level Organizations'
+        verbose_name = 'Level Organization'
+        db_table = 'level_organization'
 
     def save(self, *args, **kwargs):
         self.updated_at = timezone.now()
-        super(LevelCredantials, self).save(*args, **kwargs)
+        super(LevelOrganization, self).save(*args, **kwargs)
         return self
