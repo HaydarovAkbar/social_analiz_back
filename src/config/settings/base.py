@@ -232,7 +232,7 @@ CACHES = {
 
 # Celery settings
 
-CELERY_BROKER_URL = "redis://localhost:6379"
+CELERY_BROKER_URL = config("CELERY_BROKER_URL")
 CELERY_RESULT_BACKEND = "redis://localhost:6379"
 
 CELERY_TIMEZONE = "Asia/Tashkent"
@@ -252,6 +252,6 @@ TOKEN = config("TOKEN")
 
 TG_PARSE_MSG_COUNT = 350
 
-LIVEDONE_TOKEN = 'aa61a4c4282ef849.78657012'
+LIVEDONE_TOKEN = config('LIVEDONE_TOKEN')
 LIVEDONE_POST_URL = "https://api.livedune.ru/accounts/ID/posts"
 LIVEDONE_ACCOUNTS_URL = "https://api.livedune.ru/accounts"

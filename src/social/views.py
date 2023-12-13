@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
@@ -87,12 +89,94 @@ class GetActiveSocialView(viewsets.ModelViewSet):
         active_socials = queryset.count()
         socials = dict()
         for social_type in SocialTypes.objects.filter(state=State.objects.first()):
-            social = queryset.filter(social_type=social_type)
-            socials[social_type.attr] = {'status': social.count() > 0,
-                                         'url': social.first().link if social.count() == 1 else None}
+            social_f = queryset.filter(social_type=social_type)
+            socials[social_type.attr] = {'status': social_f.count() > 0,
+                                         'url': social_f.first().link if social_f.count() == 1 else None}
         response['socials'] = socials
         response['statistics'] = {
             'active_socials': active_socials,
             'inactive_socials': social_count - active_socials,
         }
         return Response(response, status=status.HTTP_200_OK)
+
+
+class GraphSocialPostStatsByDateView(viewsets.ModelViewSet):
+    queryset = SocialPost.objects.all().order_by('id')
+    serializer_class = serializers.GraphSocialPostStatsByDateSerializers
+    filter_backends = [SocialPostFilterByDateBackend, ]
+    http_method_names = ['get', ]
+
+    @swagger_auto_schema(manual_parameters=default_and_date_params, responses={200: 'OK'})
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        date_from = datetime.strptime(request.query_params.get('date_from', None), '%Y-%m-%d')
+        date_to = datetime.strptime(request.query_params.get('date_to', None), '%Y-%m-%d')
+        response = dict()
+        if (date_to - date_from).days < 8:
+            for i in range((date_to - date_from).days + 1):
+                date = date_from + timedelta(days=i)
+                response[date.strftime('%d.%m.%Y')] = {
+                    'views': SocialPostStats.objects.filter(post__in=queryset, created_at__date=date).aggregate(
+                        Sum('views'))['views__sum'],
+                    'likes': SocialPostStats.objects.filter(post__in=queryset, created_at__date=date).aggregate(
+                        Sum('likes'))['likes__sum'],
+                    'shares': SocialPostStats.objects.filter(post__in=queryset, created_at__date=date).aggregate(
+                        Sum('shares'))['shares__sum'],
+                    'comments': SocialPostStats.objects.filter(post__in=queryset, created_at__date=date).aggregate(
+                        Sum('comments'))['comments__sum'],
+                    'followers': SocialPostStats.objects.filter(post__in=queryset, created_at__date=date).aggregate(
+                        Sum('followers'))['followers__sum'],
+                    'reactions': SocialPostStats.objects.filter(post__in=queryset, created_at__date=date).aggregate(
+                        Sum('reactions'))['reactions__sum'],
+                    'posts': queryset.filter(created_at__date=date).count()
+                }
+        elif (date_to - date_from).days < 31:
+            # interval 5 days
+            interval = 5
+            for i in range(0, (date_to - date_from).days + 1, interval):
+                date = date_from + timedelta(days=i)
+                if (date - date_to).days >= 0:
+                    continue
+                response[date.strftime('%d.%m.%Y') + ' - ' + (date + timedelta(days=interval - 1)).strftime(
+                    '%d.%m.%Y')] = {
+                    'views': SocialPostStats.objects.filter(post__in=queryset, created_at__date__range=(
+                        date, date + timedelta(days=interval - 1))).aggregate(Sum('views'))['views__sum'],
+                    'likes': SocialPostStats.objects.filter(post__in=queryset, created_at__date__range=(
+                        date, date + timedelta(days=interval - 1))).aggregate(Sum('likes'))['likes__sum'],
+                    'shares': SocialPostStats.objects.filter(post__in=queryset, created_at__date__range=(
+                        date, date + timedelta(days=interval - 1))).aggregate(Sum('shares'))['shares__sum'],
+                    'comments': SocialPostStats.objects.filter(post__in=queryset, created_at__date__range=(
+                        date, date + timedelta(days=interval - 1))).aggregate(Sum('comments'))['comments__sum'],
+                    'followers': SocialPostStats.objects.filter(post__in=queryset, created_at__date__range=(
+                        date, date + timedelta(days=interval - 1))).aggregate(Sum('followers'))['followers__sum'],
+                    'reactions': SocialPostStats.objects.filter(post__in=queryset, created_at__date__range=(
+                        date, date + timedelta(days=interval - 1))).aggregate(Sum('reactions'))['reactions__sum'],
+                    'posts': queryset.filter(created_at__date__range=(
+                        date, date + timedelta(days=interval - 1))).count()
+                }
+        else:
+            # interval 1 month
+            interval = 30
+            for i in range(0, (date_to - date_from).days + 1, interval):
+                date = date_from + timedelta(days=i)
+                date_name = date.strftime('%B')
+                response[date_name] = {
+                    'views': SocialPostStats.objects.filter(post__in=queryset, created_at__date__range=(
+                        date, date + timedelta(days=interval - 1))).aggregate(Sum('views'))['views__sum'],
+                    'likes': SocialPostStats.objects.filter(post__in=queryset, created_at__date__range=(
+                        date, date + timedelta(days=interval - 1))).aggregate(Sum('likes'))['likes__sum'],
+                    'shares': SocialPostStats.objects.filter(post__in=queryset, created_at__date__range=(
+                        date, date + timedelta(days=interval - 1))).aggregate(Sum('shares'))['shares__sum'],
+                    'comments': SocialPostStats.objects.filter(post__in=queryset, created_at__date__range=(
+                        date, date + timedelta(days=interval - 1))).aggregate(Sum('comments'))['comments__sum'],
+                    'followers': SocialPostStats.objects.filter(post__in=queryset, created_at__date__range=(
+                        date, date + timedelta(days=interval - 1))).aggregate(Sum('followers'))['followers__sum'],
+                    'reactions': SocialPostStats.objects.filter(post__in=queryset, created_at__date__range=(
+                        date, date + timedelta(days=interval - 1))).aggregate(Sum('reactions'))['reactions__sum'],
+                    'posts': queryset.filter(created_at__date__range=(
+                        date, date + timedelta(days=interval - 1))).count()
+                }
+        return Response(response, status=status.HTTP_200_OK)
+
+    def retrieve(self, request, *args, **kwargs):
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
