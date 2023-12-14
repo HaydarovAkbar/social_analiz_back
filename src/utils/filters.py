@@ -70,3 +70,24 @@ class ActiveSocialFilterBackend(DjangoFilterBackend):
         if organization:
             queryset = queryset.filter(organization=organization)
         return queryset
+
+
+class LevelFilterBackend(DjangoFilterBackend):
+    def filter_queryset(self, request, queryset, view):
+        level = request.query_params.get('level', None)
+        organization = request.query_params.get('organization', None)
+        date_from = request.query_params.get('date_from', None)
+        date_to = request.query_params.get('date_to', None)
+        region = request.query_params.get('region', None)
+        district = request.query_params.get('district', None)
+        if level is not None:
+            queryset = queryset.filter(level=level)
+        if organization is not None:
+            queryset = queryset.filter(organization=organization)
+        if date_from is not None and date_to is not None:
+            queryset = queryset.filter(created_at__gte=date_from, created_at__lte=date_to)
+        if region:
+            queryset = queryset.filter(organization__region=region)
+        if district:
+            queryset = queryset.filter(organization__district=district)
+        return queryset

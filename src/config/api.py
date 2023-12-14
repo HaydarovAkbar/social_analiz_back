@@ -38,6 +38,7 @@ api.register(r'get_social_count_by_status', social_views.GetSocialConnectCountVi
 
 # level registeration urls
 api.register(r'level_type', level_views.LevelTypeViewSet, basename='level_type')
+api.register(r'level_organizations', level_views.LevelOrganizationViewSet, basename='level_organizations')
 
 urlpatterns = [
     path('', include(api.urls)),

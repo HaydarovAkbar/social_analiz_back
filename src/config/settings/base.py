@@ -245,7 +245,6 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
 # Bot settings
-
 TOKEN = config("TOKEN")
 
 # PARSING SETTINGS

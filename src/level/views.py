@@ -1,10 +1,16 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
+from django.utils.translation import activate
+from drf_yasg.utils import swagger_auto_schema
 
 from .models import LevelType, LevelOrganization
-from .serializers import LevelTypeSerializer, LevelOrganizationSerializer
+from .serializers import LevelTypeSerializer, LevelOrganizationSerializer, OrganizationSerializer
+from .params import get_level
 
 from utils.pagination import TenPagination
+from utils.filters import LevelFilterBackend
+
+from organization.models import Organization
 
 
 class LevelTypeViewSet(viewsets.ModelViewSet):
@@ -19,17 +25,28 @@ class LevelOrganizationViewSet(viewsets.ModelViewSet):
     queryset = LevelOrganization.objects.all()
     serializer_class = LevelOrganizationSerializer
     pagination_class = TenPagination
+    filter_backends = [LevelFilterBackend, ]
     # permission_classes = [IsAuthenticated]
     http_method_names = ['get', ]
 
-    def get_queryset(self):
-        queryset = LevelOrganization.objects.all()
-        date_from = self.request.query_params.get('date_from', None)
-        date_to = self.request.query_params.get('date_to', None)
-        level = self.request.query_params.get('level', None)
-        organization = self.request.query_params.get('organization', None)
-        if level is not None:
-            queryset = queryset.filter(level=level)
-        if organization is not None:
-            queryset = queryset.filter(organization=organization)
-        return queryset
+    @swagger_auto_schema(manual_parameters=get_level, responses={200: 'OK'},
+                         operation_id='Get level filter', operation_description='Get level filter')
+    def list(self, request, *args, **kwargs):
+        user_lang = request.Meta.get('HTTP_ACCEPT_LANGUAGE', 'ru')
+        page = request.query_params.get('page', 1)
+        limit = request.query_params.get('limit', 10)
+        activate(user_lang)
+        queryset = self.filter_queryset(self.queryset)
+        start_page, end_page = (int(page) - 1) * int(limit), int(page) * int(limit)
+        organization = Organization.objects.filter(id__in=queryset.values_list('organization', flat=True))[
+                       start_page:end_page]
+        cells, middle, middle_count = dict(), dict(), 0
+        rows = OrganizationSerializer(organization, many=True).data
+        date_from = request.query_params.get('date_from', None).strptime('%d.%m.%Y')
+        date_to = request.query_params.get('date_to', None).strptime('%d.%m.%Y')
+        if (date_to - date_from).days > 8:
+            pass
+        elif (date_to - date_from).days > 30:
+            pass
+        else:
+            pass
