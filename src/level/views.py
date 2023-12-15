@@ -2,6 +2,8 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from django.utils.translation import activate
 from drf_yasg.utils import swagger_auto_schema
+from rest_framework.response import Response
+from rest_framework import status
 
 from .models import LevelType, LevelOrganization
 from .serializers import LevelTypeSerializer, LevelOrganizationSerializer, OrganizationSerializer
@@ -50,3 +52,11 @@ class LevelOrganizationViewSet(viewsets.ModelViewSet):
             pass
         else:
             pass
+
+        response = {
+            'cells': cells,
+            'middle': middle,
+            'middle_count': middle_count,
+            'rows': rows,
+        }
+        return Response(response, status=status.HTTP_200_OK)
