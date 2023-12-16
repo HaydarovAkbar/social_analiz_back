@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django_filters.rest_framework import DjangoFilterBackend
 
 
@@ -85,6 +87,8 @@ class LevelFilterBackend(DjangoFilterBackend):
         if organization is not None:
             queryset = queryset.filter(organization=organization)
         if date_from is not None and date_to is not None:
+            date_from = datetime.strptime(date_from, '%d.%m.%Y')
+            date_to = datetime.strptime(date_to, '%d.%m.%Y')
             queryset = queryset.filter(created_at__gte=date_from, created_at__lte=date_to)
         if region:
             queryset = queryset.filter(organization__region=region)

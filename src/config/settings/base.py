@@ -117,7 +117,7 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
-    'DATETIME_FORMAT': "%Y-%m-%d"
+    'DATETIME_FORMAT': '%d.%m.%Y %H:%M',
 }
 
 # JWT settings
@@ -214,14 +214,26 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# CORS_ORIGIN_ALLOW_ALL = True
+# CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_HEADERS = [
+    'Accept',
+    'Accept-Charset',
+    'Authorization',
+    'Content-Type',
+    # Add any other headers needed by your Swagger setup
+    'Access-Control-Allow-Origin',
+    'Access-Control-Allow-Methods',
+    'Access-Control-Allow-Headers',
+    'Access-Control-Allow-Credentials',
+]
+HOST = 'https://54b6-194-93-24-3.ngrok.io'
 
-HOST = 'https://00d6-194-93-24-3.ngrok-free.app'
-
-SESSION_COOKIE_SECURE = False
-CSRF_COOKIE_SECURE = False
-CSRF_TRUSTED_ORIGINS = [HOST]
+# SESSION_COOKIE_SECURE = False
+# CSRF_COOKIE_SECURE = False
+# CSRF_TRUSTED_ORIGINS = [HOST]
 
 CACHES = {
     "default": {

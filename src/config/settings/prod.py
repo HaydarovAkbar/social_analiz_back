@@ -15,8 +15,8 @@ DATABASES = {
 DEBUG = False
 
 
-ALLOWED_HOSTS = ['pr.sport.uz', '92.63.206.242', 'localhost']
-
+# ALLOWED_HOSTS = ['pr.sport.uz', '92.63.206.242', 'localhost']
+ALLOWED_HOSTS = ['*']
 """
 IF YOU WANT SET CSRF_TRUSTED_ORIGINS = ["*"] THEN YOU SHOULD SET:
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')

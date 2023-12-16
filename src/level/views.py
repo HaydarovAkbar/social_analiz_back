@@ -47,9 +47,9 @@ class LevelOrganizationViewSet(viewsets.ModelViewSet):
         rows = OrganizationSerializer(organization, many=True).data
         cells = LevelOrganizationForDaySerializer(organization, many=True, context={'date_from': request.query_params.get('date_from'), 'date_to': request.query_params.get('date_to')}).data
         response = {
+            'rows': rows,
             'cells': cells,
             'middle': middle,
             'middle_count': middle_count,
-            'rows': rows,
         }
         return Response(response, status=status.HTTP_200_OK)
