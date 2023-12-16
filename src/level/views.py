@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from .models import LevelType, LevelOrganization
-from .serializers import LevelTypeSerializer, LevelOrganizationSerializer, OrganizationSerializer
+from .serializers import LevelTypeSerializer, LevelOrganizationSerializer, OrganizationSerializer, LevelOrganizationForDaySerializer
 from .params import get_level
 
 from utils.pagination import TenPagination
@@ -34,7 +34,8 @@ class LevelOrganizationViewSet(viewsets.ModelViewSet):
     @swagger_auto_schema(manual_parameters=get_level, responses={200: 'OK'},
                          operation_id='Get level filter', operation_description='Get level filter')
     def list(self, request, *args, **kwargs):
-        user_lang = request.Meta.get('HTTP_ACCEPT_LANGUAGE', 'ru')
+        # user_lang = request.Meta.get('HTTP_ACCEPT_LANGUAGE', 'ru')
+        user_lang = 'ru'
         page = request.query_params.get('page', 1)
         limit = request.query_params.get('limit', 10)
         activate(user_lang)
@@ -44,15 +45,7 @@ class LevelOrganizationViewSet(viewsets.ModelViewSet):
                        start_page:end_page]
         cells, middle, middle_count = dict(), dict(), 0
         rows = OrganizationSerializer(organization, many=True).data
-        date_from = request.query_params.get('date_from', None).strptime('%d.%m.%Y')
-        date_to = request.query_params.get('date_to', None).strptime('%d.%m.%Y')
-        if (date_to - date_from).days > 8:
-            pass
-        elif (date_to - date_from).days > 30:
-            pass
-        else:
-            pass
-
+        cells = LevelOrganizationForDaySerializer(organization, many=True, context={'date_from': request.query_params.get('date_from'), 'date_to': request.query_params.get('date_to')}).data
         response = {
             'cells': cells,
             'middle': middle,

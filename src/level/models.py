@@ -5,7 +5,21 @@ from organization.models import Organization
 
 
 class LevelType(models.Model):
+    COLOR_CHOICES = (
+        ('#FF0000', 'Красный (red)'),
+        ('#FFA500', 'Оранжевый (orange)'),
+        ('#FFFF00', 'Желтый (yellow)'),
+        ('#008000', 'Зеленый (green)'),
+        ('#0000FF', 'Синий (blue)'),
+        ('#4B0082', 'Фиолетовый (purple)'),
+        ('#800080', 'Фиолетовый (purple)'),
+        ('#FFC0CB', 'Розовый (pink)'),
+        ('#000000', 'Черный (black)'),
+        ('#FFFFFF', 'Белый (white)'),
+    )
     name = models.CharField(max_length=255)
+    rate = models.IntegerField(default=0)
+    color = models.CharField(max_length=255, default='#FF0000', choices=COLOR_CHOICES)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
 
@@ -36,7 +50,7 @@ class LevelOrganization(models.Model):
 
     def __str__(self):
         try:
-            return self.level.name + " " + self.organization.shortname
+            return self.level.name + " " + self.organization.id
         except:
             return self.level.name
 
