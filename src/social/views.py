@@ -281,7 +281,7 @@ class GetTop10PostView(viewsets.ModelViewSet):
         else:
             telegram = SocialTypes.objects.get(attr='telegram')
             youtube = SocialTypes.objects.get(attr='youtube')
-            top_posts = SocialPost.objects.filter(Q(social_type=youtube) | Q(social_type=telegram)).values('id',
+            top_posts = SocialPost.objects.filter(Q(social_type=youtube) | Q(social_type=telegram)).values('organization__id',
                                                                                                            'post_date',
                                                                                                            'url',
                                                                                                            'organization__shortname') \
