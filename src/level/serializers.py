@@ -71,7 +71,10 @@ class LevelOrganizationForDaySerializer(serializers.ModelSerializer):
                         'color': new_level.color,
                     }
                 else:
-                    level_avarage = level_organization_average['level__rate__avg'] / interval
+                    level_count = LevelOrganization.objects.filter(organization=instance,
+                                                                   created_at__date__range=(
+                                                                       date, date_to)).count()
+                    level_avarage = level_organization_average['level__rate__avg'] / level_count
                     new_level = LevelType.objects.filter(rate__gte=level_avarage).first()
                     response[date_to.strftime('%d.%m.%Y')] = {
                         'level': new_level.name,
@@ -94,7 +97,10 @@ class LevelOrganizationForDaySerializer(serializers.ModelSerializer):
                         'color': new_level.color,
                     }
                 else:
-                    level_avarage = level_organization_average['level__rate__avg'] / interval
+                    level_count = LevelOrganization.objects.filter(organization=instance,
+                                                                   created_at__date__range=(
+                                                                       date_from, date_to))
+                    level_avarage = level_organization_average['level__rate__avg'] / level_count
                     new_level = LevelType.objects.filter(rate__gte=level_avarage).first()
                     response[date_to.strftime('%B')] = {
                         'level': new_level.name,
