@@ -19,3 +19,15 @@ filter_default_params = [
             openapi.Parameter('organization', openapi.IN_QUERY, description="Organization id", type=openapi.TYPE_INTEGER),
             openapi.Parameter('social_type', openapi.IN_QUERY, description="Social type id", type=openapi.TYPE_INTEGER),
         ]
+
+
+default_and_sort_params = [
+            openapi.Parameter('date_from', openapi.IN_QUERY, description="Start date", type=openapi.TYPE_STRING, required=True),
+            openapi.Parameter('date_to', openapi.IN_QUERY, description="End date", type=openapi.TYPE_STRING, required=True),
+            openapi.Parameter('category', openapi.IN_QUERY, description="Category id", type=openapi.TYPE_INTEGER),
+            openapi.Parameter('region', openapi.IN_QUERY, description="Region id", type=openapi.TYPE_INTEGER),
+            openapi.Parameter('district', openapi.IN_QUERY, description="District id", type=openapi.TYPE_INTEGER),
+            openapi.Parameter('organization', openapi.IN_QUERY, description="Organization id", type=openapi.TYPE_INTEGER),
+            openapi.Parameter('social_type', openapi.IN_QUERY, description="Social type id", type=openapi.TYPE_INTEGER),
+            openapi.Parameter('ordering', openapi.IN_QUERY, description="Ordering", type=openapi.TYPE_STRING),
+        ]

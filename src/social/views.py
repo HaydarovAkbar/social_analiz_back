@@ -5,13 +5,13 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
 from django_filters.rest_framework import DjangoFilterBackend
-from django.db.models import Sum
+from django.db.models import Sum, Count, Q
 from drf_yasg.utils import swagger_auto_schema
 
 from . import models
 from . import serializers
 from .models import SocialPost, SocialPostStats, Social, SocialTypes
-from .params import default_and_date_params, filter_default_params
+from .params import default_and_date_params, filter_default_params, default_and_sort_params
 
 from organization.models import Organization
 from utils.models import State
@@ -220,7 +220,71 @@ class GetSocialPostByDateViewSet(viewsets.ModelViewSet):
         """Get social post by date"""
         try:
             lang = request.META.get('HTTP_ACCEPT_LANGUAGE', 'ru')
-        except Exception as e:
+        except Exception:
             lang = 'ru'
         activate(lang)
         return super().list(request, *args, **kwargs)
+
+
+class GetTop10OrganizationView(viewsets.ModelViewSet):
+    queryset = SocialPost.objects.all().order_by('id')
+    serializer_class = serializers.SocialPostByDateSerializers
+    filter_backends = [SocialPostFilterByDateBackend, ]
+    pagination_class = TwentyPagination
+    http_method_names = ['get', ]
+
+    @swagger_auto_schema(manual_parameters=default_and_date_params, responses={200: 'OK'},
+                         operation_id='Get Top 10 by filter')
+    def list(self, request, *args, **kwargs):
+        """Get Top 10 by filter"""
+        try:
+            lang = request.META.get('HTTP_ACCEPT_LANGUAGE', 'ru')
+        except Exception:
+            lang = 'ru'
+        activate(lang)
+        page = int(request.query_params.get('page', 1))
+        limit = int(request.query_params.get('limit', 10))
+        top_organizations = SocialPost.objects.values('organization__id', 'organization__shortname') \
+                                .annotate(total_posts=Count('id')) \
+                                .order_by('-total_posts')[page * limit - limit:page * limit]
+        return Response(status=status.HTTP_200_OK, data=top_organizations)
+
+
+class GetTop10PostView(viewsets.ModelViewSet):
+    queryset = SocialPost.objects.all().order_by('id')
+    serializer_class = serializers.SocialPostByDateSerializers
+    filter_backends = [SocialPostFilterByDateBackend, ]
+    pagination_class = TwentyPagination
+    http_method_names = ['get', ]
+
+    @swagger_auto_schema(manual_parameters=default_and_sort_params, responses={200: 'OK'},
+                         operation_id='Get Top 10 by filter')
+    def list(self, request, *args, **kwargs):
+        """Get Top 10 by filter"""
+        try:
+            lang = request.META.get('HTTP_ACCEPT_LANGUAGE', 'ru')
+        except Exception:
+            lang = 'ru'
+        activate(lang)
+        page = int(request.query_params.get('page', 1))
+        limit = int(request.query_params.get('limit', 10))
+        ordering = request.query_params.get('ordering', 'views')
+        if ordering == 'likes':
+            instagram = SocialTypes.objects.get(attr='instagram')
+            facebook = SocialTypes.objects.get(attr='facebook')
+            top_posts = SocialPost.objects.filter(Q(social_type=instagram) | Q(social_type=facebook)).values('id',
+                                                                                                             'post_date',
+                                                                                                             'url',
+                                                                                                             'organization__shortname') \
+                            .annotate(total_likes=Sum('socialpoststats__likes')) \
+                            .order_by('-total_likes')[page * limit - limit:page * limit]
+        else:
+            telegram = SocialTypes.objects.get(attr='telegram')
+            youtube = SocialTypes.objects.get(attr='youtube')
+            top_posts = SocialPost.objects.filter(Q(social_type=youtube) | Q(social_type=telegram)).values('id',
+                                                                                                           'post_date',
+                                                                                                           'url',
+                                                                                                           'organization__shortname') \
+                            .annotate(total_views=Sum('socialpoststats__views')) \
+                            .order_by('total_views')[page * limit - limit:page * limit]
+        return Response(status=status.HTTP_200_OK, data=top_posts)
