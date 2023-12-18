@@ -35,6 +35,7 @@ api.register(r'graph_social_post_stats_by_date', social_views.GraphSocialPostSta
              basename='graph_social_post_stats_by_date')
 api.register(r'get_social_count_by_status', social_views.GetSocialConnectCountView,
              basename='get_social_count_by_status')
+api.register(r'get_social_post_by_date', social_views.GetSocialPostByDateViewSet, basename='get_social_post_by_date')
 
 # level registeration urls
 api.register(r'level_type', level_views.LevelTypeViewSet, basename='level_type')

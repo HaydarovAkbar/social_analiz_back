@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 
+from django.utils.translation import activate
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
@@ -204,3 +205,22 @@ class GetSocialConnectCountView(viewsets.ModelViewSet):
                 state=State.objects.first()).count() - social_count
             response[item.attr] = social_attr
         return Response(response, status=status.HTTP_200_OK)
+
+
+class GetSocialPostByDateViewSet(viewsets.ModelViewSet):
+    queryset = SocialPost.objects.all().order_by('id')
+    serializer_class = serializers.SocialPostByDateSerializers
+    filter_backends = [SocialPostFilterByDateBackend, ]
+    pagination_class = TwentyPagination
+    http_method_names = ['get', ]
+
+    @swagger_auto_schema(manual_parameters=default_and_date_params, responses={200: 'OK'},
+                         operation_id='Get social post by date')
+    def list(self, request, *args, **kwargs):
+        """Get social post by date"""
+        try:
+            lang = request.META.get('HTTP_ACCEPT_LANGUAGE', 'ru')
+        except Exception as e:
+            lang = 'ru'
+        activate(lang)
+        return super().list(request, *args, **kwargs)

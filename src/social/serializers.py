@@ -31,7 +31,6 @@ class SocialPostStatsSerializers(serializers.ModelSerializer):
 
 
 class GetSocialPostStatsByDateSerializers(serializers.ModelSerializer):
-
     class Meta:
         model = models.SocialPostStats
         fields = '__all__'
@@ -44,7 +43,32 @@ class GetActiveSocialSerializers(serializers.ModelSerializer):
 
 
 class GraphSocialPostStatsByDateSerializers(serializers.ModelSerializer):
-
     class Meta:
         model = models.SocialPost
         fields = '__all__'
+
+
+class SocialPostByDateSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = models.SocialPost
+        fields = ['id', 'post_date', 'url', 'organization']
+
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        response['post_date'] = instance.post_date.strftime('%d.%m.%Y')
+        post_stat = models.SocialPostStats.objects.filter(post=instance).last()
+        if post_stat:
+            response['views'] = post_stat.views
+            response['likes'] = post_stat.likes
+            response['comments'] = post_stat.comments
+            response['shares'] = post_stat.shares
+            response['reactions'] = post_stat.reactions
+            response['followers'] = post_stat.followers
+        else:
+            response['views'] = 0
+            response['likes'] = 0
+            response['comments'] = 0
+            response['shares'] = 0
+            response['reactions'] = 0
+            response['followers'] = 0
+        return response

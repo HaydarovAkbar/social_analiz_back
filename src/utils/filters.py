@@ -36,10 +36,10 @@ class SocialPostFilterByDateBackend(DjangoFilterBackend):
         social_type = request.query_params.get('social_type', None)
         organization = request.query_params.get('organization', None)
 
-        if date_from:
-            queryset = queryset.filter(created_at__gte=date_from)
-        if date_to:
-            queryset = queryset.filter(created_at__lte=date_to)
+        if date_from and date_to:
+            date_from = datetime.strptime(date_from, '%d.%m.%Y')
+            date_to = datetime.strptime(date_to, '%d.%m.%Y')
+            queryset = queryset.filter(created_at__gte=date_from, created_at__lte=date_to)
         if region:
             queryset = queryset.filter(organization__region=region)
         if district:
