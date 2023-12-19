@@ -108,3 +108,34 @@ class LevelOrganizationForDaySerializer(serializers.ModelSerializer):
                         'color': new_level.color,
                     }
         return {instance.id: response}
+
+
+class LevelOrganizationForRangeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Organization
+        fields = "__all__"
+
+    def to_representation(self, instance):
+        date_from = self.context.get('date_from', None)
+        date_to = self.context.get('date_to', None)
+        date_from, date_to = datetime.strptime(date_from, '%d.%m.%Y'), datetime.strptime(date_to, '%d.%m.%Y')
+        response = dict()
+        level_organization_average = LevelOrganization.objects.filter(organization=instance,
+                                                                      created_at__date__range=(
+                                                                          date_from, date_to)).aggregate(
+            Avg('level__rate'))
+        level_count = LevelOrganization.objects.filter(organization=instance,
+                                                       created_at__date__range=(
+                                                           date_from, date_to)).count()
+        if not level_organization_average['level__rate__avg']:
+            new_level = LevelType.objects.filter(rate__gte=0).first()
+            response['level'] = new_level.name
+            response['type'] = new_level.rate
+            response['color'] = new_level.color
+        else:
+            level_avarage = level_organization_average['level__rate__avg'] / level_count
+            new_level = LevelType.objects.filter(rate__gte=level_avarage).first()
+            response['level'] = new_level.name
+            response['type'] = new_level.rate
+            response['color'] = new_level.color
+        return {instance.id: response}

@@ -169,13 +169,9 @@ LOGGING = {
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-# LANGUAGE_CODE = 'uz'
-
 USE_I18N = True
 
 USE_L10N = True
-
-# Translate settings
 
 gettext = lambda s: s
 
@@ -229,7 +225,7 @@ CORS_ALLOW_HEADERS = [
     'Access-Control-Allow-Headers',
     'Access-Control-Allow-Credentials',
 ]
-HOST = 'https://a080-194-93-24-3.ngrok-free.app'
+HOST = 'https://9a9b-194-93-24-3.ngrok-free.app'
 
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False

@@ -6,7 +6,8 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from .models import LevelType, LevelOrganization
-from .serializers import LevelTypeSerializer, LevelOrganizationSerializer, OrganizationSerializer, LevelOrganizationForDaySerializer
+from .serializers import LevelTypeSerializer, LevelOrganizationSerializer, OrganizationSerializer, \
+    LevelOrganizationForDaySerializer, LevelOrganizationForRangeSerializer
 from .params import get_level
 
 from utils.pagination import TenPagination
@@ -41,15 +42,20 @@ class LevelOrganizationViewSet(viewsets.ModelViewSet):
         activate(user_lang)
         queryset = self.filter_queryset(self.queryset)
         start_page, end_page = (int(page) - 1) * int(limit), int(page) * int(limit)
-        organization = Organization.objects.filter(id__in=queryset.values_list('organization', flat=True))[
+        organizations = Organization.objects.filter(id__in=queryset.values_list('organization', flat=True))[
                        start_page:end_page]
         cells, middle, middle_count = dict(), dict(), 0
-        rows = OrganizationSerializer(organization, many=True).data
-        cells = LevelOrganizationForDaySerializer(organization, many=True, context={'date_from': request.query_params.get('date_from'), 'date_to': request.query_params.get('date_to')}).data
+        rows = OrganizationSerializer(organizations, many=True).data
+        cells = LevelOrganizationForDaySerializer(organizations, many=True,
+                                                  context={'date_from': request.query_params.get('date_from'),
+                                                           'date_to': request.query_params.get('date_to')}).data
+        middle = LevelOrganizationForRangeSerializer(organizations, many=True,
+                                                     context={'date_from': request.query_params.get('date_from'),
+                                                              'date_to': request.query_params.get('date_to')}).data
         response = {
             'rows': rows,
             'cells': cells,
             'middle': middle,
-            'middle_count': middle_count,
+            'middle_row': middle_count,
         }
         return Response(response, status=status.HTTP_200_OK)
