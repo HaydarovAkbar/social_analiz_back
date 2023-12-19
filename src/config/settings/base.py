@@ -263,3 +263,10 @@ TG_PARSE_MSG_COUNT = 350
 LIVEDONE_TOKEN = config('LIVEDONE_TOKEN')
 LIVEDONE_POST_URL = "https://api.livedune.ru/accounts/ID/posts"
 LIVEDONE_ACCOUNTS_URL = "https://api.livedune.ru/accounts"
+
+
+MINIO_HOST = config("MINIO_HOST")
+MINIO_ACCESS_KEY = config("MINIO_ACCESS_KEY")
+MINIO_SECRET_KEY = config("MINIO_SECRET_KEY")
+MINIO_BUCKET_NAME = config("MINIO_BUCKET_NAME")
+MINIO_SECURE = False
