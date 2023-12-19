@@ -52,6 +52,7 @@ class LevelOrganizationViewSet(viewsets.ModelViewSet):
         middle = LevelOrganizationForRangeSerializer(organizations, many=True,
                                                      context={'date_from': request.query_params.get('date_from'),
                                                               'date_to': request.query_params.get('date_to')}).data
+
         response = {
             'rows': rows,
             'cells': cells,
