@@ -7,7 +7,7 @@ from rest_framework import status
 
 from .models import LevelType, LevelOrganization
 from .serializers import LevelTypeSerializer, LevelOrganizationSerializer, OrganizationSerializer, \
-    LevelOrganizationForDaySerializer, LevelOrganizationForRangeSerializer
+    LevelOrganizationForDaySerializer, LevelMiddleSerializer
 from .params import get_level
 
 from utils.pagination import TenPagination
@@ -44,12 +44,12 @@ class LevelOrganizationViewSet(viewsets.ModelViewSet):
         start_page, end_page = (int(page) - 1) * int(limit), int(page) * int(limit)
         organizations = Organization.objects.filter(id__in=queryset.values_list('organization', flat=True))[
                        start_page:end_page]
-        cells, middle, middle_count = dict(), dict(), 0
+        cells, middle, middle_count = dict(), dict(), dict()
         rows = OrganizationSerializer(organizations, many=True).data
         cells = LevelOrganizationForDaySerializer(organizations, many=True,
                                                   context={'date_from': request.query_params.get('date_from'),
                                                            'date_to': request.query_params.get('date_to')}).data
-        middle = LevelOrganizationForRangeSerializer(organizations, many=True,
+        middle = LevelMiddleSerializer(organizations, many=True,
                                                      context={'date_from': request.query_params.get('date_from'),
                                                               'date_to': request.query_params.get('date_to')}).data
 

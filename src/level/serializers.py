@@ -110,7 +110,7 @@ class LevelOrganizationForDaySerializer(serializers.ModelSerializer):
         return {instance.id: response}
 
 
-class LevelOrganizationForRangeSerializer(serializers.ModelSerializer):
+class LevelMiddleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Organization
         fields = "__all__"
