@@ -35,23 +35,25 @@ class LevelOrganizationViewSet(viewsets.ModelViewSet):
     @swagger_auto_schema(manual_parameters=get_level, responses={200: 'OK'},
                          operation_id='Get level filter', operation_description='Get level filter')
     def list(self, request, *args, **kwargs):
-        # user_lang = request.Meta.get('HTTP_ACCEPT_LANGUAGE', 'ru')
-        user_lang = 'ru'
+        try:
+            user_lang = request.Meta.get('HTTP_ACCEPT_LANGUAGE', 'ru')
+        except Exception:
+            user_lang = 'ru'
         page = request.query_params.get('page', 1)
         limit = request.query_params.get('limit', 10)
         activate(user_lang)
         queryset = self.filter_queryset(self.queryset)
         start_page, end_page = (int(page) - 1) * int(limit), int(page) * int(limit)
         organizations = Organization.objects.filter(id__in=queryset.values_list('organization', flat=True))[
-                       start_page:end_page]
+                        start_page:end_page]
         cells, middle, middle_count = dict(), dict(), dict()
         rows = OrganizationSerializer(organizations, many=True).data
         cells = LevelOrganizationForDaySerializer(organizations, many=True,
                                                   context={'date_from': request.query_params.get('date_from'),
                                                            'date_to': request.query_params.get('date_to')}).data
         middle = LevelMiddleSerializer(organizations, many=True,
-                                                     context={'date_from': request.query_params.get('date_from'),
-                                                              'date_to': request.query_params.get('date_to')}).data
+                                       context={'date_from': request.query_params.get('date_from'),
+                                                'date_to': request.query_params.get('date_to')}).data
 
         response = {
             'rows': rows,
