@@ -1,5 +1,5 @@
 from modeltranslation.translator import translator, TranslationOptions, register
-from ..models import State, District, Region, Language, Category, Specialization
+from ..models import State, District, Region, Language, Category, Specialization, Instruction
 
 
 @register(State)
@@ -25,3 +25,8 @@ class RegionTranslationOptions(TranslationOptions):
 @register(District)
 class DistrictTranslationOptions(TranslationOptions):
     fields = ('shortname', 'fullname')
+
+
+@register(Instruction)
+class InstructionTranslationOptions(TranslationOptions):
+    fields = ('file_name', 'content')

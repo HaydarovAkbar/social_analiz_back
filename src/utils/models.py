@@ -121,3 +121,27 @@ class District(models.Model):
         self.updated_at = timezone.now()
         super(District, self).save(*args, **kwargs)
         return self
+
+
+class Instruction(models.Model):
+    file_name = models.CharField(max_length=250)
+    file_id = models.CharField(max_length=250, null=True, blank=True)
+    file_extension = models.CharField(max_length=250, null=True, blank=True)
+    content = models.TextField(null=True, blank=True)
+    state = models.ForeignKey(State, on_delete=models.SET_NULL, null=True, blank=True, related_name='instruction', )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name_plural = 'Instructions'
+        verbose_name = 'Instruction'
+        db_table = 'instruction'
+
+    def save(self, *args, **kwargs):
+        self.updated_at = timezone.now()
+        super(Instruction, self).save(*args, **kwargs)
+        return self
