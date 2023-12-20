@@ -227,7 +227,7 @@ CORS_ALLOW_HEADERS = [
     'Access-Control-Allow-Headers',
     'Access-Control-Allow-Credentials',
 ]
-HOST = 'https://9a9b-194-93-24-3.ngrok-free.app'
+HOST = 'https://c969-194-93-24-3.ngrok-free.app'
 
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
