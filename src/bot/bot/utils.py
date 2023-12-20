@@ -11,7 +11,6 @@ def tg_parse(msg_id, channel):
         end_with_count = txt.index('span', start_with_count, start_with_count + 1000)
         start_with_time = txt.find('datetime')
         end_with_time = txt.index('datetime', start_with_time + 20, start_with_time + 100)
-
         count_v = {'K': 1000, "M": 1000000}
         view_count = txt[start_with_count + 27:end_with_count - 2]
         for key, value in count_v.items():

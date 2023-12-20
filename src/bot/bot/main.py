@@ -26,12 +26,11 @@ def get_channel_members(channel_username):
     return int(resp['result'])
 
 
-
 def channel_post(update: Update, context):
-    # print(update.channel_post)
     channel_username = update.channel_post.chat.username
     content = update.channel_post.text if update.channel_post.caption is None else update.channel_post.caption
     social_type = SocialTypes.objects.get(name='telegram')
+
     post_link, msg_id = update.channel_post.link, update.channel_post.message_id
     organization_ = Organization.objects.filter(username=channel_username)
     media_group_id = str(update.channel_post.media_group_id)
@@ -132,6 +131,7 @@ def help(update: Update, context):
 </i>
 """
     update.message.reply_html(msg_txt)
+    return True
 
 
 all_handler = MessageHandler(Filters.all, message)
