@@ -4,6 +4,7 @@ from django.utils import timezone
 
 from utils.models import State
 
+
 class FileStatus(models.Model):
     name = models.CharField(max_length=255, verbose_name=_('Name'))
     state = models.ForeignKey(State, on_delete=models.SET_NULL, null=True, blank=True)
@@ -50,6 +51,8 @@ class Files(models.Model):
     post_date = models.DateField(null=True, blank=True, verbose_name=_('Post date'))
     television_type = models.ForeignKey(TelevisionType, on_delete=models.SET_NULL, null=True, blank=True,
                                         related_name='files', verbose_name=_('Television type'))
+    file_status = models.ForeignKey(FileStatus, on_delete=models.SET_NULL, null=True, blank=True,
+                                    related_name='files', verbose_name=_('File status'))
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
