@@ -38,7 +38,7 @@ class InputFileViewSet(viewsets.ModelViewSet):
     # authentication_classes = [IsAuthenticated, ]
     pagination_class = TwentyPagination
 
-    @swagger_auto_schema(request_body=serializers.InputFileSerializer, manual_parameters=file_input_params)
+    @swagger_auto_schema(request_body=serializers.InputFileSerializer)
     def create(self, request, *args, **kwargs):
         data = request.data
         file = data.get('file')
