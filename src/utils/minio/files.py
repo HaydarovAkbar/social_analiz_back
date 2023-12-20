@@ -2,7 +2,7 @@ from minio import Minio
 from django.conf import settings
 
 
-def add_file_with_minio(file_id, file, file_extension, length):
+def add_file(file_id, file, file_extension, length):
     client = Minio(
         settings.MINIO_HOST,
         access_key=settings.MINIO_ACCESS_KEY,
@@ -18,7 +18,7 @@ def add_file_with_minio(file_id, file, file_extension, length):
     return True
 
 
-def get_file_with_minio(object_name):
+def get_file(object_name):
     client = Minio(
         settings.MINIO_HOST,
         access_key=settings.MINIO_ACCESS_KEY,
@@ -32,7 +32,7 @@ def get_file_with_minio(object_name):
     return response.read()
 
 
-def remove_file_with_minio(object_name):
+def remove_file(object_name):
     client = Minio(
         settings.MINIO_HOST,
         access_key=settings.MINIO_ACCESS_KEY,
