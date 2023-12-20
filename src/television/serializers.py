@@ -19,3 +19,11 @@ class FilesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Files
         fields = '__all__'
+
+
+class InputFileSerializer(serializers.ModelSerializer):
+    file = serializers.FileField()
+
+    class Meta:
+        model = Files
+        fields = ['file', 'organization', 'television_type', 'content', 'post_date']

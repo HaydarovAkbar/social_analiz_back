@@ -49,6 +49,7 @@ api.register(r'level_average', level_views.LevelOrganizationViewSet, basename='l
 api.register(r'tv_status', tv_views.FileStatusViewSet, basename='tv_status')
 api.register(r'tv_type', tv_views.TelevisionTypeViewSet, basename='tv_type')
 api.register(r'tv_file', tv_views.FilesViewSet, basename='tv_file')
+api.register(r'input_file', tv_views.InputFileViewSet, basename='input_file')
 
 urlpatterns = [
     path('', include(api.urls)),

@@ -1,11 +1,12 @@
 from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-
+from drf_yasg.utils import swagger_auto_schema
 import uuid
 
 from . import serializers
 from . import models
+from .params import file_input_params
 
 from utils.pagination import TenPagination, TwentyPagination
 from utils.minio import MinioClient
@@ -37,6 +38,7 @@ class InputFileViewSet(viewsets.ModelViewSet):
     # authentication_classes = [IsAuthenticated, ]
     pagination_class = TwentyPagination
 
+    @swagger_auto_schema(request_body=serializers.InputFileSerializer, manual_parameters=file_input_params)
     def create(self, request, *args, **kwargs):
         data = request.data
         file = data.get('file')
