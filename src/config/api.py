@@ -7,6 +7,7 @@ from level import views as level_views
 from organization import views as organ_views
 from social import views as social_views
 from utils import views as utils_views
+from television import views as tv_views
 
 api = routers.DefaultRouter()
 # account registeration urls
@@ -43,6 +44,11 @@ api.register(r'get_top10_post', social_views.GetTop10PostView, basename='get_top
 # level registeration urls
 api.register(r'level_type', level_views.LevelTypeViewSet, basename='level_type')
 api.register(r'level_average', level_views.LevelOrganizationViewSet, basename='level_average')
+
+# television registeration urls
+api.register(r'tv_status', tv_views.FileStatusViewSet, basename='tv_status')
+api.register(r'tv_type', tv_views.TelevisionTypeViewSet, basename='tv_type')
+api.register(r'tv_file', tv_views.FilesViewSet, basename='tv_file')
 
 urlpatterns = [
     path('', include(api.urls)),
