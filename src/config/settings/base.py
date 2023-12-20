@@ -195,6 +195,7 @@ MODELTRANSLATION_TRANSLATION_FILES = (
     'organization.translation.translate',
     'level.translation.translate',
     'utils.translation.translate',
+    'television.translation.translate',
 )
 
 TIME_ZONE = "Asia/Tashkent"
@@ -260,10 +261,13 @@ TOKEN = config("TOKEN")
 
 TG_PARSE_MSG_COUNT = 350
 
+# Integration settings
+
 LIVEDONE_TOKEN = config('LIVEDONE_TOKEN')
 LIVEDONE_POST_URL = "https://api.livedune.ru/accounts/ID/posts"
 LIVEDONE_ACCOUNTS_URL = "https://api.livedune.ru/accounts"
 
+# Minio settings
 
 MINIO_HOST = config("MINIO_HOST")
 MINIO_ACCESS_KEY = config("MINIO_ACCESS_KEY")

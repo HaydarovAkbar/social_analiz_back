@@ -29,7 +29,7 @@ class CategoryView(viewsets.ModelViewSet):
 
 
 class SpecializationView(viewsets.ModelViewSet):
-    queryset = models.Specialization.objects.all().order_by('id')
+    queryset = models.Specialization.objects.all()
     serializer_class = serializers.SpecializationSerializers
     pagination_class = TenPagination
 

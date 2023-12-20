@@ -2,12 +2,11 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 
+from utils.models import State
 
 class FileStatus(models.Model):
     name = models.CharField(max_length=255, verbose_name=_('Name'))
-    state = models.ForeignKey('utils.State', on_delete=models.SET_NULL, null=True, blank=True,
-                              related_name='file_statuses',
-                              verbose_name=_('State'))
+    state = models.ForeignKey(State, on_delete=models.SET_NULL, null=True, blank=True)
 
     objects = models.Manager()
 
@@ -22,9 +21,7 @@ class FileStatus(models.Model):
 
 class TelevisionType(models.Model):
     name = models.CharField(max_length=255, verbose_name=_('Name'))
-    state = models.ForeignKey('utils.State', on_delete=models.SET_NULL, null=True, blank=True,
-                              related_name='television_types',
-                              verbose_name=_('State'))
+    state = models.ForeignKey(State, on_delete=models.SET_NULL, null=True, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -44,8 +41,7 @@ class Files(models.Model):
     file_id = models.CharField(max_length=250, null=True, blank=True)
     file_extension = models.CharField(max_length=250, null=True, blank=True)
     content = models.TextField(null=True, blank=True)
-    state = models.ForeignKey('utils.State', on_delete=models.SET_NULL, null=True, blank=True,
-                              related_name='instruction', )
+    state = models.ForeignKey(State, on_delete=models.SET_NULL, null=True, blank=True)
 
     organization = models.ForeignKey('organization.Organization', on_delete=models.SET_NULL, null=True, blank=True,
                                      related_name='files', verbose_name=_('Organization'))
