@@ -134,7 +134,7 @@ class Instruction(models.Model):
     updated_at = models.DateTimeField(auto_now=True, null=True)
 
     def __str__(self):
-        return self.title
+        return self.file_name
 
     class Meta:
         verbose_name_plural = 'Instructions'
