@@ -37,3 +37,17 @@ class DistrictSerializers(serializers.ModelSerializer):
     class Meta:
         model = models.District
         fields = ['id', 'shortname', 'fullname', 'order', 'code', 'created_at', 'state', 'region']
+
+
+class InstructionCreateSerializers(serializers.ModelSerializer):
+    file = serializers.FileField()
+
+    class Meta:
+        model = models.Instruction
+        fields = ['file', 'content', 'content_uz', 'content_oz', 'content_ru', 'content_en']
+
+
+class InstructionSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = models.Instruction
+        fields = ['id', 'content']

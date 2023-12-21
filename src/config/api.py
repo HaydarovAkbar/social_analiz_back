@@ -23,6 +23,7 @@ api.register(r'category', utils_views.CategoryView, basename='category')
 api.register(r'specialization', utils_views.SpecializationView, basename='specialization')
 api.register(r'region', utils_views.RegionView, basename='region')
 api.register(r'district', utils_views.DistrictView, basename='district')
+api.register(r'instruction', utils_views.InstructionView, basename='instruction')
 
 # social registeration urls
 api.register(r'social_types', social_views.SocialTypeView, basename='social_types')

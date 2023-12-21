@@ -35,12 +35,10 @@ class FilesViewSet(viewsets.ModelViewSet):
 
 class InputFileViewSet(viewsets.ModelViewSet):
     queryset = models.Files.objects.all()
-    serializer_class = serializers.FilesSerializer
+    serializer_class = serializers.InputFileSerializer
     # authentication_classes = [IsAuthenticated, ]
     pagination_class = TwentyPagination
 
-    # @action(detail=False, methods=['post'])
-    @swagger_auto_schema(request_body=serializers.InputFileSerializer)
     def create(self, request, *args, **kwargs):
         data = request.data
         file = data.get('file')

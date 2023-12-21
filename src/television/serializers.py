@@ -22,8 +22,9 @@ class FilesSerializer(serializers.ModelSerializer):
 
 
 class InputFileSerializer(serializers.ModelSerializer):
-    file = serializers.FileField(read_only=True)
+    file = serializers.FileField()
 
     class Meta:
         model = Files
         fields = ['file', 'organization', 'television_type', 'content', 'post_date']
+        read_only_fields = ['file', ]
