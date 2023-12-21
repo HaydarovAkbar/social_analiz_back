@@ -18,11 +18,9 @@ class OrganizationView(viewsets.ModelViewSet):
     pagination_class = TenPagination
     filter_backends = [OrganizationFilterBackend, ]
     filterset_fields = ['shortname', 'inn', ]
-    permission_classes = [IsAuthenticated, ]
+    # permission_classes = [IsAuthenticated, ]
 
-    # def list(self, request, *args, **kwargs):
-    #     user = request.user
-    #     user_lang = user.language.code
-    #     print(user_lang)
-    #     activate(user_lang)
-    #     return super(OrganizationView, self).list(request, *args, **kwargs)
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return serializers.ListOrganizationSerializers
+        return serializers.OrganizationSerializers

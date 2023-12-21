@@ -5,7 +5,10 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 class OrganizationFilterBackend(DjangoFilterBackend):
     def filter_queryset(self, request, queryset, view):
-        user_lang = request.user.language.code
+        try:
+            user_lang = request.user.language.code
+        except Exception:
+            user_lang = 'ru'
         shortname = request.query_params.get('shortname', None)
         inn = request.query_params.get('inn', None)
         if shortname:
