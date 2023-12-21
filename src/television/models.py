@@ -7,6 +7,7 @@ from utils.models import State
 
 class FileStatus(models.Model):
     name = models.CharField(max_length=255, verbose_name=_('Name'))
+    attr = models.CharField(max_length=35, verbose_name=_('Attribute'))
     state = models.ForeignKey(State, on_delete=models.SET_NULL, null=True, blank=True)
 
     objects = models.Manager()

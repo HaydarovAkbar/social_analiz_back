@@ -3,6 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from drf_yasg.utils import swagger_auto_schema
 import uuid
+from rest_framework.decorators import action
 
 from . import serializers
 from . import models
@@ -38,11 +39,12 @@ class InputFileViewSet(viewsets.ModelViewSet):
     # authentication_classes = [IsAuthenticated, ]
     pagination_class = TwentyPagination
 
+    # @action(detail=False, methods=['post'])
     @swagger_auto_schema(request_body=serializers.InputFileSerializer)
     def create(self, request, *args, **kwargs):
         data = request.data
         file = data.get('file')
-        file_status = models.FileStatus.objects.get(id=1)
+        file_status = models.FileStatus.objects.get(attr='created')
         minio_client = MinioClient()
         file_id = uuid.uuid4()
         file_extention = file.name.split('.')[-1]

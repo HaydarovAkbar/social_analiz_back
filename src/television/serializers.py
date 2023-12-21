@@ -22,7 +22,7 @@ class FilesSerializer(serializers.ModelSerializer):
 
 
 class InputFileSerializer(serializers.ModelSerializer):
-    file = serializers.FileField()
+    file = serializers.FileField(read_only=True)
 
     class Meta:
         model = Files
