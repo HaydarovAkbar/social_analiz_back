@@ -207,6 +207,9 @@ class GetSocialConnectCountView(viewsets.ModelViewSet):
             response[item.attr] = social_attr
         return Response(response, status=status.HTTP_200_OK)
 
+    def retrieve(self, request, *args, **kwargs):
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
 
 class GetSocialPostByDateViewSet(viewsets.ModelViewSet):
     queryset = SocialPost.objects.all().order_by('id')
@@ -225,6 +228,9 @@ class GetSocialPostByDateViewSet(viewsets.ModelViewSet):
             lang = 'ru'
         activate(lang)
         return super().list(request, *args, **kwargs)
+
+    def retrieve(self, request, *args, **kwargs):
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
 
 class GetTop10OrganizationView(viewsets.ModelViewSet):
@@ -249,6 +255,9 @@ class GetTop10OrganizationView(viewsets.ModelViewSet):
                                 .annotate(total_posts=Count('id')) \
                                 .order_by('-total_posts')[page * limit - limit:page * limit]
         return Response(status=status.HTTP_200_OK, data=top_organizations)
+
+    def retrieve(self, request, *args, **kwargs):
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
 
 class GetTop10PostView(viewsets.ModelViewSet):
@@ -291,6 +300,9 @@ class GetTop10PostView(viewsets.ModelViewSet):
                             .order_by('total_views')[page * limit - limit:page * limit]
         return Response(status=status.HTTP_200_OK, data=top_posts)
 
+    def retrieve(self, request, *args, **kwargs):
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
 
 class SocialConnectionByOrganizationView(viewsets.ModelViewSet):
     queryset = Social.objects.all()
@@ -322,3 +334,6 @@ class SocialConnectionByOrganizationView(viewsets.ModelViewSet):
             'data': InactiveSocialOrganizationSerializers(inactive_org, many=True).data
         }
         return Response(response, status=status.HTTP_200_OK)
+
+    def retrieve(self, request, *args, **kwargs):
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
