@@ -32,6 +32,7 @@ DEV_APPS = [
     'level',
     'utils',
     'television',
+    'rate',
     'bot.apps.BotConfig',
 ]
 
