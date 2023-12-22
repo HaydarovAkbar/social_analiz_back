@@ -14,6 +14,7 @@ from .models import SocialPost, SocialPostStats, Social, SocialTypes
 from .params import default_and_date_params, filter_default_params, default_and_sort_params
 
 from organization.models import Organization
+from organization.serializers import InactiveSocialOrganizationSerializers
 from utils.models import State
 from utils.pagination import TenPagination, TwentyPagination
 from utils.filters import SocialPostFilterByDateBackend, ActiveSocialFilterBackend
@@ -292,7 +293,7 @@ class GetTop10PostView(viewsets.ModelViewSet):
 
 
 class SocialConnectionByOrganizationView(viewsets.ModelViewSet):
-    queryset = Social.objects.all().order_by('id')
+    queryset = Social.objects.all()
     serializer_class = serializers.SocialConnectionSerializers
     filter_backends = [ActiveSocialFilterBackend, ]
     http_method_names = ['get', ]
@@ -307,16 +308,17 @@ class SocialConnectionByOrganizationView(viewsets.ModelViewSet):
         except Exception:
             user_lang = 'ru'
         activate(user_lang)
+        social_type = request.query_params.get('social_type', None)
         response = dict()
-        active_count = queryset.filter(state=State.objects.first()).count()
         response['active'] = {
-            'count': active_count,
-            'list': serializers.SocialConnectionSerializers(queryset.filter(state=State.objects.first()),
+            'count': queryset.filter(state=State.objects.first()).count(),
+            'data': serializers.SocialConnectionSerializers(queryset.filter(state=State.objects.first()),
                                                             many=True).data
         }
+        inactive_org = Organization.objects.filter(
+            Q(social__isnull=True) | ~ Q(social__social_type=models.SocialTypes.objects.get(id=social_type)))
         response['inactive'] = {
-            'count': Organization.objects.filter(state=State.objects.last()).count(),
-            'list': serializers.SocialConnectionSerializers(queryset.filter(state=State.objects.last()),
-                                                            many=True).data
+            'count': inactive_org.count(),
+            'data': InactiveSocialOrganizationSerializers(inactive_org, many=True).data
         }
         return Response(response, status=status.HTTP_200_OK)

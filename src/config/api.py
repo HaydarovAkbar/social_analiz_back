@@ -10,6 +10,7 @@ from utils import views as utils_views
 from television import views as tv_views
 
 api = routers.DefaultRouter()
+
 # account registeration urls
 api.register(r'users', account_views.UserView, basename='users')
 
@@ -41,6 +42,8 @@ api.register(r'get_social_post_by_date', social_views.GetSocialPostByDateViewSet
 api.register(r'get_top10_organ', social_views.GetTop10OrganizationView,
              basename='get_top10_organ')
 api.register(r'get_top10_post', social_views.GetTop10PostView, basename='get_top10_post')
+api.register(r'get_connect_by_organization', social_views.SocialConnectionByOrganizationView,
+             basename='get_connect_by_organization')
 
 # level registeration urls
 api.register(r'level_type', level_views.LevelTypeViewSet, basename='level_type')

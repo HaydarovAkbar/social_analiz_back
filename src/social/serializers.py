@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from django.db.models import Sum
 
 from . import models
 
@@ -77,8 +76,10 @@ class SocialPostByDateSerializers(serializers.ModelSerializer):
 class SocialConnectionSerializers(serializers.ModelSerializer):
     class Meta:
         model = models.Social
-        fields = ['id', 'social', 'organization', 'state']
+        fields = ['id', 'organization']
 
     def to_representation(self, instance):
-        response = super().to_representation(instance)
-        response['organization_name'] = instance.organization.shortname
+        response = dict()
+        response['id'] = instance.organization.id
+        response['shortname'] = instance.organization.shortname
+        return response

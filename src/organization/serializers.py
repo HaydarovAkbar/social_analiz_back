@@ -24,3 +24,15 @@ class ListOrganizationSerializers(serializers.ModelSerializer):
         data['category'] = instance.category.shortname
         data['specialization'] = instance.specialization.shortname
         return data
+
+
+class InactiveSocialOrganizationSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = models.Organization
+        fields = '__all__'
+
+    def to_representation(self, instance):
+        response = dict()
+        response['id'] = instance.id
+        response['shortname'] = instance.shortname
+        return response
