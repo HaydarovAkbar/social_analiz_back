@@ -63,7 +63,6 @@ class ActiveSocialFilterBackend(DjangoFilterBackend):
         category = request.query_params.get('category', None)
         social_type = request.query_params.get('social_type', None)
         organization = request.query_params.get('organization', None)
-
         if region:
             queryset = queryset.filter(organization__region=region)
         if district:

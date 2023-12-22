@@ -281,10 +281,42 @@ class GetTop10PostView(viewsets.ModelViewSet):
         else:
             telegram = SocialTypes.objects.get(attr='telegram')
             youtube = SocialTypes.objects.get(attr='youtube')
-            top_posts = SocialPost.objects.filter(Q(social_type=youtube) | Q(social_type=telegram)).values('organization__id',
-                                                                                                           'post_date',
-                                                                                                           'url',
-                                                                                                           'organization__shortname') \
+            top_posts = SocialPost.objects.filter(Q(social_type=youtube) | Q(social_type=telegram)).values(
+                'organization__id',
+                'post_date',
+                'url',
+                'organization__shortname') \
                             .annotate(total_views=Sum('socialpoststats__views')) \
                             .order_by('total_views')[page * limit - limit:page * limit]
         return Response(status=status.HTTP_200_OK, data=top_posts)
+
+
+class SocialConnectionByOrganizationView(viewsets.ModelViewSet):
+    queryset = Social.objects.all().order_by('id')
+    serializer_class = serializers.SocialConnectionSerializers
+    filter_backends = [ActiveSocialFilterBackend, ]
+    http_method_names = ['get', ]
+
+    @swagger_auto_schema(manual_parameters=filter_default_params, responses={200: 'OK'},
+                         operation_id='Get social connect by organization')
+    def list(self, request, *args, **kwargs):
+        """Get social connect by organization"""
+        queryset = self.filter_queryset(self.get_queryset())
+        try:
+            user_lang = request.META.get('HTTP_ACCEPT_LANGUAGE', 'ru')
+        except Exception:
+            user_lang = 'ru'
+        activate(user_lang)
+        response = dict()
+        active_count = queryset.filter(state=State.objects.first()).count()
+        response['active'] = {
+            'count': active_count,
+            'list': serializers.SocialConnectionSerializers(queryset.filter(state=State.objects.first()),
+                                                            many=True).data
+        }
+        response['inactive'] = {
+            'count': Organization.objects.filter(state=State.objects.last()).count(),
+            'list': serializers.SocialConnectionSerializers(queryset.filter(state=State.objects.last()),
+                                                            many=True).data
+        }
+        return Response(response, status=status.HTTP_200_OK)

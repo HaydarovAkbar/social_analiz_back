@@ -72,3 +72,13 @@ class SocialPostByDateSerializers(serializers.ModelSerializer):
             response['reactions'] = 0
             response['followers'] = 0
         return response
+
+
+class SocialConnectionSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = models.Social
+        fields = ['id', 'social', 'organization', 'state']
+
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        response['organization_name'] = instance.organization.shortname
