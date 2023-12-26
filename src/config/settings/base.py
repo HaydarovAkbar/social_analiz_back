@@ -222,7 +222,8 @@ CORS_ALLOW_HEADERS = [
     'Accept-Charset',
     'Authorization',
     'Content-Type',
-    # Add any other headers needed by your Swagger setup
+    # Add any other heade
+    # rs needed by your Swagger setup
     'Access-Control-Allow-Origin',
     'Access-Control-Allow-Methods',
     'Access-Control-Allow-Headers',
