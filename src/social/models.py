@@ -12,6 +12,7 @@ class SocialTypes(models.Model):
     state = models.ForeignKey(State, on_delete=models.SET_NULL, null=True)
 
     objects = models.Manager()
+
     def __str__(self):
         return self.name
 
@@ -131,7 +132,6 @@ class SocialPostComment(models.Model):
     comment_id = models.CharField(max_length=255, null=True, blank=True)
     media_group_id = models.CharField(max_length=24, null=True, blank=True)
     url = models.URLField(null=True, blank=True)
-
 
     created_at = models.DateTimeField(auto_now_add=True)
 
