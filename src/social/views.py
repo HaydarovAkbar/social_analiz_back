@@ -82,7 +82,6 @@ class GetActiveSocialView(viewsets.ModelViewSet):
     filterset_fields = ['organization', 'social_type', 'organization__region', 'organization__district']
     http_method_names = ['get', ]
 
-    # @swagger_auto_schema(manual_parameters=filter_default_params, responses={200: 'OK'})
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
         response = dict()
@@ -100,6 +99,9 @@ class GetActiveSocialView(viewsets.ModelViewSet):
             'active_socials': active_socials,
         }
         return Response(response, status=status.HTTP_200_OK)
+
+    def retrieve(self, request, *args, **kwargs):
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
 
 class GraphSocialPostStatsByDateView(viewsets.ModelViewSet):
@@ -189,7 +191,8 @@ class GetSocialConnectCountView(viewsets.ModelViewSet):
     queryset = Social.objects.all().order_by('id')
     serializer_class = serializers.GetActiveSocialSerializers
     filter_backends = [DjangoFilterBackend, ]
-    filterset_fields = ['organization', 'social_type', 'organization__region', 'organization__district', 'organization__category']
+    filterset_fields = ['organization', 'social_type', 'organization__region', 'organization__district',
+                        'organization__category']
     http_method_names = ['get', ]
 
     @swagger_auto_schema(manual_parameters=filter_default_params, responses={200: 'OK'},
@@ -309,7 +312,8 @@ class SocialConnectionByOrganizationView(viewsets.ModelViewSet):
     queryset = Social.objects.all()
     serializer_class = serializers.SocialConnectionSerializers
     filter_backends = [DjangoFilterBackend, ]
-    filterset_fields = ['organization', 'social_type', 'organization__region', 'organization__district', 'organization__category']
+    filterset_fields = ['organization', 'social_type', 'organization__region', 'organization__district',
+                        'organization__category']
     http_method_names = ['get', ]
 
     @swagger_auto_schema(manual_parameters=filter_default_params, responses={200: 'OK'},
