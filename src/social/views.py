@@ -17,7 +17,7 @@ from organization.models import Organization
 from organization.serializers import InactiveSocialOrganizationSerializers
 from utils.models import State
 from utils.pagination import TenPagination, TwentyPagination
-from utils.filters import SocialPostFilterByDateBackend, ActiveSocialFilterBackend
+from utils.filters import SocialPostFilterByDateBackend
 
 
 class SocialTypeView(viewsets.ModelViewSet):
@@ -78,28 +78,26 @@ class GetSocialPostStatsByDateView(viewsets.ModelViewSet):
 class GetActiveSocialView(viewsets.ModelViewSet):
     queryset = Social.objects.all().order_by('id')
     serializer_class = serializers.GetActiveSocialSerializers
-    filter_backends = [ActiveSocialFilterBackend, ]
+    filter_backends = [DjangoFilterBackend, ]
+    filterset_fields = ['organization', 'social_type', 'organization__region', 'organization__district']
     http_method_names = ['get', ]
 
-    @swagger_auto_schema(manual_parameters=filter_default_params, responses={200: 'OK'})
+    # @swagger_auto_schema(manual_parameters=filter_default_params, responses={200: 'OK'})
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
         response = dict()
-        social_types_count = SocialTypes.objects.filter(state=State.objects.first()).count()
-        organization_count = self.filter_queryset(Organization.objects.filter(state=State.objects.first()).count())
-        social_count = organization_count * social_types_count
         active_socials = queryset.count()
         socials = dict()
         for social_type in SocialTypes.objects.filter(state=State.objects.first()):
             social_f = queryset.filter(social_type=social_type)
             socials[social_type.attr] = {'status': social_f.count() > 0,
+                                         'name': social_type.name,
                                          'url': social_f.first().link if social_f.count() == 1 else None,
-                                         'active_count': social_f.count(),
-                                         'inactive_count': organization_count - social_f.count()}
+                                         'count': social_f.count(),
+                                         }
         response['socials'] = socials
         response['statistics'] = {
             'active_socials': active_socials,
-            'inactive_socials': social_count - active_socials,
         }
         return Response(response, status=status.HTTP_200_OK)
 
@@ -190,7 +188,8 @@ class GraphSocialPostStatsByDateView(viewsets.ModelViewSet):
 class GetSocialConnectCountView(viewsets.ModelViewSet):
     queryset = Social.objects.all().order_by('id')
     serializer_class = serializers.GetActiveSocialSerializers
-    filter_backends = [ActiveSocialFilterBackend, ]
+    filter_backends = [DjangoFilterBackend, ]
+    filterset_fields = ['organization', 'social_type', 'organization__region', 'organization__district', 'organization__category']
     http_method_names = ['get', ]
 
     @swagger_auto_schema(manual_parameters=filter_default_params, responses={200: 'OK'},
@@ -309,7 +308,8 @@ class GetTop10PostView(viewsets.ModelViewSet):
 class SocialConnectionByOrganizationView(viewsets.ModelViewSet):
     queryset = Social.objects.all()
     serializer_class = serializers.SocialConnectionSerializers
-    filter_backends = [ActiveSocialFilterBackend, ]
+    filter_backends = [DjangoFilterBackend, ]
+    filterset_fields = ['organization', 'social_type', 'organization__region', 'organization__district', 'organization__category']
     http_method_names = ['get', ]
 
     @swagger_auto_schema(manual_parameters=filter_default_params, responses={200: 'OK'},
@@ -339,6 +339,3 @@ class SocialConnectionByOrganizationView(viewsets.ModelViewSet):
 
     def retrieve(self, request, *args, **kwargs):
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
-
-
-
