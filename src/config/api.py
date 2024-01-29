@@ -17,6 +17,8 @@ api.register(r'users', account_views.UserView, basename='users')
 # organization registeration urls
 api.register(r'organizations', organ_views.OrganizationView, basename='organizations')
 api.register(r'organization_list', organ_views.GetOrganizationListView, basename='organization_list')
+api.register(r'org_count_by_status', organ_views.OrganizationCountByStatusView,
+                basename='org_count_by_status')
 
 # utils registeration urls
 api.register(r'state', utils_views.StateView, basename='state')

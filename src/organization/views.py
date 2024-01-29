@@ -9,6 +9,7 @@ from rest_framework.permissions import IsAuthenticated
 from . import models
 from utils.pagination import TenPagination
 from utils.filters import OrganizationFilterBackend, OrganizationListFilterBackend
+from utils.models import State
 from . import serializers
 
 
@@ -38,3 +39,21 @@ class GetOrganizationListView(viewsets.ModelViewSet):
     # def get_serializer_class(self):
     #     if self.action == 'list':
     #         return serializers.ListOrganizationSerializers
+
+
+class OrganizationCountByStatusView(viewsets.ModelViewSet):
+    queryset = models.Organization.objects.all()
+    serializer_class = serializers.InactiveSocialOrganizationSerializers
+    pagination_class = TenPagination
+    filter_backends = [DjangoFilterBackend, ]
+    filterset_fields = ['region', 'district', 'category']
+    # permission_classes = [IsAuthenticated, ]
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        data = dict()
+        data['all'] = queryset.count()
+        state = State.objects.first()
+        data['active'] = queryset.filter(state=state).count()
+        data['inactive'] = queryset.exclude(state=state).count()
+        return Response(data, status=status.HTTP_200_OK)

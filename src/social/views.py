@@ -195,8 +195,8 @@ class GetSocialConnectCountView(viewsets.ModelViewSet):
                         'organization__category']
     http_method_names = ['get', ]
 
-    @swagger_auto_schema(manual_parameters=filter_default_params, responses={200: 'OK'},
-                         operation_id='Get social connect count')
+    # @swagger_auto_schema(manual_parameters=filter_default_params, responses={200: 'OK'},
+    #                      operation_id='Get social connect count')
     def list(self, request, *args, **kwargs):
         """Get social connect count"""
         queryset = self.filter_queryset(self.get_queryset())
@@ -316,16 +316,11 @@ class SocialConnectionByOrganizationView(viewsets.ModelViewSet):
                         'organization__category']
     http_method_names = ['get', ]
 
-    @swagger_auto_schema(manual_parameters=filter_default_params, responses={200: 'OK'},
-                         operation_id='Get social connect by organization')
+    # @swagger_auto_schema(manual_parameters=filter_default_params, responses={200: 'OK'},
+    #                      operation_id='Get social connect by organization')
     def list(self, request, *args, **kwargs):
         """Get social connect by organization"""
         queryset = self.filter_queryset(self.get_queryset())
-        try:
-            user_lang = request.META.get('HTTP_ACCEPT_LANGUAGE', 'ru')
-        except Exception:
-            user_lang = 'ru'
-        activate(user_lang)
         social_type = request.query_params.get('social_type', None)
         response = dict()
         response['active'] = {
