@@ -93,7 +93,9 @@ class GetActiveSocialView(viewsets.ModelViewSet):
         for social_type in SocialTypes.objects.filter(state=State.objects.first()):
             social_f = queryset.filter(social_type=social_type)
             socials[social_type.attr] = {'status': social_f.count() > 0,
-                                         'url': social_f.first().link if social_f.count() == 1 else None}
+                                         'url': social_f.first().link if social_f.count() == 1 else None,
+                                         'active_count': social_f.count(),
+                                         'inactive_count': organization_count - social_f.count()}
         response['socials'] = socials
         response['statistics'] = {
             'active_socials': active_socials,

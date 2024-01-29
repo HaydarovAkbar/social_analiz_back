@@ -1,5 +1,6 @@
 from . import models
 from rest_framework import serializers
+from social.models import Social, SocialTypes
 
 
 class OrganizationSerializers(serializers.ModelSerializer):
@@ -34,5 +35,9 @@ class InactiveSocialOrganizationSerializers(serializers.ModelSerializer):
     def to_representation(self, instance):
         response = dict()
         response['id'] = instance.id
-        response['shortname'] = instance.shortname
+        response['short_name'] = instance.shortname
+        response['full_name'] = instance.fullname
+        website = SocialTypes.objects.filter(attr='web').first()
+        social = Social.objects.filter(organization=instance, social_type=website).first()
+        response['website'] = social.link if social else None
         return response

@@ -16,6 +16,7 @@ api.register(r'users', account_views.UserView, basename='users')
 
 # organization registeration urls
 api.register(r'organizations', organ_views.OrganizationView, basename='organizations')
+api.register(r'organization_list', organ_views.GetOrganizationListView, basename='organization_list')
 
 # utils registeration urls
 api.register(r'state', utils_views.StateView, basename='state')
@@ -33,7 +34,7 @@ api.register(r'social_post', social_views.SocialPostView, basename='social_post'
 api.register(r'social_post_stats', social_views.SocialPostStatsView, basename='social_post_stats')
 api.register(r'get_social_post_stats_by_date', social_views.GetSocialPostStatsByDateView,
              basename='get_social_post_stats_by_date')
-api.register(r'get_active_social', social_views.GetActiveSocialView, basename='get_active_social')
+api.register(r'get_active_social', social_views.GetActiveSocialView, basename='get_active_social')  # satsial_network
 api.register(r'graph_social_post_stats_by_date', social_views.GraphSocialPostStatsByDateView,
              basename='graph_social_post_stats_by_date')  # for stats
 api.register(r'get_social_count_by_status', social_views.GetSocialConnectCountView,

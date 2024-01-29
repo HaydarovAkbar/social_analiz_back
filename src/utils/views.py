@@ -4,7 +4,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 import uuid
 
 from . import models
-from .pagination import TenPagination
+from .pagination import TenPagination, TwentyPagination
 from . import serializers
 
 from .minio.files import MinioClient
@@ -39,13 +39,13 @@ class SpecializationView(viewsets.ModelViewSet):
 class RegionView(viewsets.ModelViewSet):
     queryset = models.Region.objects.all()
     serializer_class = serializers.RegionSerializers
-    pagination_class = TenPagination
+    pagination_class = TwentyPagination
 
 
 class DistrictView(viewsets.ModelViewSet):
     queryset = models.District.objects.all()
     serializer_class = serializers.DistrictSerializers
-    pagination_class = TenPagination
+    pagination_class = TwentyPagination
     filter_backends = [DjangoFilterBackend, ]
     filterset_fields = ['region', ]
 

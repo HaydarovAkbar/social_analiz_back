@@ -105,3 +105,24 @@ class LevelFilterBackend(DjangoFilterBackend):
         if district:
             queryset = queryset.filter(organization__district=district)
         return queryset
+
+
+class OrganizationListFilterBackend(DjangoFilterBackend):
+    def filter_queryset(self, request, queryset, view):
+        region = request.query_params.get('region', None)
+        district = request.query_params.get('district', None)
+        category = request.query_params.get('category', None)
+        specialization = request.query_params.get('specialization', None)
+        if region and region != 'null':
+            queryset = queryset.filter(region=region)
+        if district and district != 'null':
+            queryset = queryset.filter(district=district)
+        if category and category != 'null':
+            queryset = queryset.filter(category=category)
+        if specialization and specialization != 'null':
+            queryset = queryset.filter(specialization=specialization)
+        user = request.user
+        if user.is_superuser:
+            return queryset
+        else:
+            return queryset.filter(user=user)
