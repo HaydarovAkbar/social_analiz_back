@@ -63,12 +63,12 @@ class GetSocialPostStatsByDateView(viewsets.ModelViewSet):
         response = dict()
         response['posts'] = queryset.count()
         get_post_stats = SocialPostStats.objects.filter(post__in=queryset)
-        response['views'] = get_post_stats.aggregate(Sum('views'))['views__sum']
-        response['likes'] = get_post_stats.aggregate(Sum('likes'))['likes__sum']
-        response['shares'] = get_post_stats.aggregate(Sum('shares'))['shares__sum']
-        response['comments'] = get_post_stats.aggregate(Sum('comments'))['comments__sum']
-        response['followers'] = get_post_stats.aggregate(Sum('followers'))['followers__sum']
-        response['reactions'] = get_post_stats.aggregate(Sum('reactions'))['reactions__sum']
+        response['views'] = get_post_stats.aggregate(Sum('views'))['views__sum'] or 0
+        response['likes'] = get_post_stats.aggregate(Sum('likes'))['likes__sum'] or 0
+        response['shares'] = get_post_stats.aggregate(Sum('shares'))['shares__sum'] or 0
+        response['comments'] = get_post_stats.aggregate(Sum('comments'))['comments__sum'] or 0
+        response['followers'] = get_post_stats.aggregate(Sum('followers'))['followers__sum'] or 0
+        response['reactions'] = get_post_stats.aggregate(Sum('reactions'))['reactions__sum'] or 0
         return Response(response, status=status.HTTP_200_OK)
 
     def retrieve(self, request, *args, **kwargs):

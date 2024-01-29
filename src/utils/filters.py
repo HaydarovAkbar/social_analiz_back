@@ -2,6 +2,8 @@ from datetime import datetime
 
 from django_filters.rest_framework import DjangoFilterBackend
 
+from utils.models import State
+
 
 class OrganizationFilterBackend(DjangoFilterBackend):
     def filter_queryset(self, request, queryset, view):
@@ -38,21 +40,27 @@ class SocialPostFilterByDateBackend(DjangoFilterBackend):
         category = request.query_params.get('category', None)
         social_type = request.query_params.get('social_type', None)
         organization = request.query_params.get('organization', None)
+        is_connect = request.query_params.get('is_connect', None)
 
         if date_from and date_to:
-            date_from = datetime.strptime(date_from, '%d.%m.%Y')
-            date_to = datetime.strptime(date_to, '%d.%m.%Y')
+            # date_from = datetime.strptime(date_from, '%d.%m.%Y')
+            # date_to = datetime.strptime(date_to, '%d.%m.%Y')
+            date_from = datetime.strptime(date_from, '%Y-%m-%d')
+            date_to = datetime.strptime(date_to, '%Y-%m-%d')
             queryset = queryset.filter(created_at__gte=date_from, created_at__lte=date_to)
-        if region:
+        if region and region != 'null':
             queryset = queryset.filter(organization__region=region)
-        if district:
+        if district and district != 'null':
             queryset = queryset.filter(organization__district=district)
-        if category:
+        if category and category != 'null':
             queryset = queryset.filter(organization__category=category)
-        if social_type:
+        if social_type and social_type != 'null':
             queryset = queryset.filter(social_type=social_type)
-        if organization:
+        if organization and organization != 'null':
             queryset = queryset.filter(organization=organization)
+        if is_connect and is_connect != 'null':
+            state = State.objects.first()
+            queryset = queryset.filter(state=state)
         return queryset
 
 

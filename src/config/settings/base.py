@@ -33,7 +33,7 @@ DEV_APPS = [
     'utils',
     'television',
     'rate',
-    'bot.apps.BotConfig',
+    # 'bot.apps.BotConfig',
 ]
 
 PROD_APPS = [
@@ -229,7 +229,8 @@ CORS_ALLOW_HEADERS = [
     'Access-Control-Allow-Headers',
     'Access-Control-Allow-Credentials',
 ]
-HOST = 'https://2e0e-194-93-24-3.ngrok-free.app'
+# HOST = 'https://2e0e-194-93-24-3.ngrok-free.app'
+HOST = 'http://172.17.17.68:8000'
 
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
