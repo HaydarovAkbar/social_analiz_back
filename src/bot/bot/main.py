@@ -26,7 +26,6 @@ def get_channel_members(channel_username):
     return int(resp['result'])
 
 
-
 def channel_post(update: Update, context):
     channel_username = update.channel_post.chat.username
     content = update.channel_post.text if update.channel_post.caption is None else update.channel_post.caption
