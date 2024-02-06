@@ -3,8 +3,9 @@ from telegram import Update
 from .bot.main import bot, dispatcher
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
-import json
 from django.views import View
+
+import json
 
 
 @method_decorator(csrf_exempt, name='dispatch')
