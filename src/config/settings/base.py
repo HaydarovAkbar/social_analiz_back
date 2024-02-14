@@ -230,7 +230,7 @@ CORS_ALLOW_HEADERS = [
     'Access-Control-Allow-Credentials',
 ]
 # HOST = 'https://2e0e-194-93-24-3.ngrok-free.app'
-HOST = 'http://172.17.17.68:8000'
+HOST = 'http://172.17.17.68:7000'
 
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
