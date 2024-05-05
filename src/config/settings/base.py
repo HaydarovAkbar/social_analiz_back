@@ -64,6 +64,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'axes.middleware.AxesMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'middleware.default_language.CustomLocaleMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -218,19 +219,20 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_HEADERS = [
-    'Accept',
-    'Accept-Charset',
-    'Authorization',
-    'Content-Type',
-    # Add any other heade
-    # rs needed by your Swagger setup
-    'Access-Control-Allow-Origin',
-    'Access-Control-Allow-Methods',
-    'Access-Control-Allow-Headers',
-    'Access-Control-Allow-Credentials',
+    # 'Accept',
+    # 'Accept-Charset',
+    # 'Authorization',
+    # 'Content-Type',
+    # # Add any other heade
+    # # rs needed by your Swagger setup
+    # 'Access-Control-Allow-Origin',
+    # 'Access-Control-Allow-Methods',
+    # 'Access-Control-Allow-Headers',
+    # 'Access-Control-Allow-Credentials',
+    '*'
 ]
 # HOST = 'https://2e0e-194-93-24-3.ngrok-free.app'
-HOST = 'http://172.17.17.68:7000'
+HOST = 'http://172.17.17.68:8000'
 
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False

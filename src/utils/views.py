@@ -76,7 +76,3 @@ class InstructionView(viewsets.ModelViewSet):
         )
         file_obj.save()
         return Response({'status': 'success'}, status=status.HTTP_201_CREATED)
-
-
-    # def list(self, request, *args, **kwargs):
-    #     insturction = models.Instruction.objects.all()

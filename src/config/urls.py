@@ -46,8 +46,9 @@ urlpatterns = [
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('admin/', admin.site.urls),
     path('bot/', BotMainView.as_view()),
+    path('api/v1/', include(api_urls)),
 ]
 
-urlpatterns += i18n_patterns(
-    path('api/v1/', include(api_urls)),
-)
+# urlpatterns += i18n_patterns(
+#     path('api/v1/', include(api_urls)),
+# )

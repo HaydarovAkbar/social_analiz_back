@@ -48,6 +48,7 @@ class OrganizationCountByStatusView(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend, ]
     filterset_fields = ['region', 'district', 'category']
     # permission_classes = [IsAuthenticated, ]
+    http_method_names = ['get', ]
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
