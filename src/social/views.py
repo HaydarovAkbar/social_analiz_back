@@ -24,7 +24,7 @@ class SocialTypeView(viewsets.ModelViewSet):
     queryset = models.SocialTypes.objects.all()
     serializer_class = serializers.SocialTypesSerializers
     pagination_class = TenPagination
-    http_method_names = ['get', ]
+    # http_method_names = ['get', ]
 
 
 class SocialView(viewsets.ModelViewSet):
