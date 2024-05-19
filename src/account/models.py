@@ -35,15 +35,6 @@ class User(AbstractUser):
         related_query_name="%(app_label)s_%(class)ss",
     )
 
-    user_permissions = models.ManyToManyField(
-        Permission,
-        verbose_name=_('user permissions'),
-        blank=True,
-        help_text=_('Specific permissions for this user.'),
-        related_name="%(app_label)s_%(class)s_related",  # Change the related_name
-        related_query_name="%(app_label)s_%(class)ss",
-    )
-
     def __str__(self):
         return self.first_name + " " + self.last_name
 
