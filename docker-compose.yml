@@ -1,0 +1,23 @@
+version: '3.9'
+
+services:
+  web:
+    build: ./src
+    command: python manage.py runserver 0.0.0.0:7000
+    volumes:
+      - ./src/:/usr/src/src
+    ports:
+      - 7000:7000
+    env_file:
+      - ./.env.dev
+
+  celery:
+    build: ./src
+    command: celery -A config worker -l info
+    volumes:
+      - ./src/:/usr/src/src
+    env_file:
+      - ./.env.dev
+
+  redis:
+    image: "redis:alpine"
